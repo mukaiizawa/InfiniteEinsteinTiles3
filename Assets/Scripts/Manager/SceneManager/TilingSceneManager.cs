@@ -13,7 +13,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 
-using static MathHex;
 using static Tags;
 
 [DefaultExecutionOrder(100)]
@@ -51,7 +50,6 @@ public class TilingSceneManager : MonoBehaviour
     public GameObject ActiveTiles;
     public GameObject PlacedTiles;
     public GameObject PrefabTile;
-    public GameObject BackGround;
     public GameObject PuzzleFrame;    // enable only Puzzle mode.
 
     /*
@@ -77,7 +75,6 @@ public class TilingSceneManager : MonoBehaviour
     public GameObject TimeOverPanel;
     public GameObject ColorPalettePanel;
     public Button CameraButton;
-    public Toggle RulerButton;
     public Button MenuOpenButton;
     public Button MenuCloseButton;
     public Button SettingOpenButton;
@@ -160,7 +157,6 @@ public class TilingSceneManager : MonoBehaviour
     Board _answerBoard;
     ConcurrentStack<Tuple<Action, TileMemory[], Color>> _histories = new ConcurrentStack<Tuple<Action, TileMemory[], Color>>();
     ConcurrentStack<Tuple<Action, TileMemory[], Color>> _undoHistories = new ConcurrentStack<Tuple<Action, TileMemory[], Color>>();
-    ConcurrentSet<PartialHex> _partialHexTable = new ConcurrentSet<PartialHex>();
 
     /*
      * tile API.
@@ -214,7 +210,7 @@ public class TilingSceneManager : MonoBehaviour
         foreach (GameObject tile in tiles)
         {
             tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            tile.transform.position = NearestObliqueWorldPoint(tile.transform.position);
+            tile.transform.position = tile.transform.position;    // TODO: align position.
             tile.transform.parent = PlacedTiles.transform;
         }
     }
@@ -280,21 +276,6 @@ public class TilingSceneManager : MonoBehaviour
         }
     }
 
-    void FlipActiveTiles()
-    {
-        _audioManager.PlaySE(_assetManager.SETileRotate);
-        var tiles = ActiveTiles.Children();
-        ActiveTiles.transform.position = _mousePos;
-        Vector3 scale = ActiveTiles.transform.localScale;
-        scale.x *= -1;
-        ActiveTiles.transform.localScale = scale;
-        ActiveTiles.transform.DetachChildren();
-        scale.x *= -1;
-        ActiveTiles.transform.localScale = scale;
-        foreach (GameObject tile in tiles)
-            tile.transform.parent = ActiveTiles.transform;
-    }
-
     void SelectTiles(GameObject[] tiles)
     {
         foreach (GameObject tile in tiles)
@@ -352,7 +333,7 @@ public class TilingSceneManager : MonoBehaviour
         if (action == Action.Put) PutTiles(MakeTiles(memories));
         else
         {
-            HashSet<Vector2Int> targetPositions = memories.Select(x => x.Position).ToHashSet();
+            var targetPositions = memories.Select(x => x.Position).ToHashSet();
             foreach (GameObject tile in PlacedTiles.Children().Where(x => targetPositions.Contains(x.GetComponent<Tile>().ExportMemory().Position)))
                 Destroy(tile);
         }
@@ -372,7 +353,7 @@ public class TilingSceneManager : MonoBehaviour
         switch (GlobalData.GameMode)
         {
             case GameMode.Puzzle:
-                if (_partialHexTable.Count() == _answerBoard.PartialHexes.Count() && _partialHexTable.ContainsAll(_answerBoard.PartialHexes))
+                if (false)    // TODO: puzzle complete
                 {
                     _audioManager.PlaySE(_assetManager.SEPuzzleComplete);
                     ScatterTiles();
@@ -391,15 +372,14 @@ public class TilingSceneManager : MonoBehaviour
 
     void UpdateTileCount()
     {
-        int n = _partialHexTable.Count() / 10;
+        int n = 99;    // TODO
         switch (GlobalData.GameMode)
         {
             case GameMode.Creative:
                 TextTileCount.text = $"{n}";
                 break;
             case GameMode.Puzzle:
-                var N = _answerBoard.PartialHexes.Count() / 10;
-                _answerBoard.PartialHexes.Count();
+                var N = 999;    // TODO
                 TextTileCount.text = $"{n} / {N}";
                 TextTileCount.color = n == N? Colors.OK: n > N? Colors.NG: Color.white;
                 break;
@@ -411,14 +391,14 @@ public class TilingSceneManager : MonoBehaviour
     bool UpdateBoard(Action action, TileMemory[] memories)
     {
         Debug.Log("TilingSceneManager#UpdateBoard: " + action);
-        var partialHexes = memories.SelectMany(x => x.PartialHexes());
         switch (action)
         {
             case Action.Put:
-                if (!_partialHexTable.TryAddAll(partialHexes)) return false;    // failed to put.
+                // TODO
+                if (false) return false;    // failed to put.
                 break;
             case Action.Remove:
-                _partialHexTable.RemoveAll(partialHexes);
+                // TODO
                 break;
         }
         UpdateTileCount();
@@ -571,8 +551,10 @@ public class TilingSceneManager : MonoBehaviour
         if (GlobalData.GameMode == GameMode.Nil)
         {
             GlobalData.GameMode = GameMode.Creative;
-            LoadPrevScene(false);
-            return;
+            // TODO
+            GlobalData.Solution = _persistentManager.LoadSolutions(GameMode.Creative, -1, -1)[0];
+            // LoadPrevScene(false);
+            // return;
         }
 #endif
         TextTimer.gameObject.SetActive(GlobalData.GameMode == GameMode.Puzzle && GlobalData.IsHardcoreMode);
@@ -582,7 +564,6 @@ public class TilingSceneManager : MonoBehaviour
         SettingOpenButton.onClick.AddListener(() => ChangeState(State.Setting));
         SettingCloseButton.onClick.AddListener(() => ChangeState(State.Menu));
         CameraButton.onClick.AddListener(() => StartCoroutine(CaptureScreenshotCoroutine()));
-        RulerButton.onValueChanged.AddListener(OnRulerToggle);
         ColorPaletteOpenButton.onClick.AddListener(OnColorPaletteOpenButtonClick);
         ColorPaletteCloseButton.onClick.AddListener(() => ChangeState(State.None));
         PipetteButton.onClick.AddListener(() => ChangeState(State.Pipette));
@@ -793,7 +774,6 @@ public class TilingSceneManager : MonoBehaviour
                 }
                 // move back ground
                 Vector3 screenCenterWorldPoint = _camera.ScreenToWorldPoint(new Vector2(Screen.width / 2, Screen.height / 2));
-                BackGround.transform.position = LeftBottomObliqueWorldPoint(screenCenterWorldPoint);
                 // zoom
                 _camera.orthographicSize = Mathf.Clamp(_camera.orthographicSize - _cameraZoomDelta * dt, _cameraMinZoom, _cameraMaxZoom);
                 break;
@@ -839,7 +819,7 @@ public class TilingSceneManager : MonoBehaviour
             else if ((_mouseWheelInputCount = _mouseWheelInputCount + 1) % _mouseWheelRotationThreshold == 0)
             {
                 _cameraZoomDelta = 0f;
-                RotateActiveTiles(val.y > 0f? 60: -60);
+                RotateActiveTiles(val.y > 0f? 30: -30);
             }
             return;
         }
@@ -871,24 +851,6 @@ public class TilingSceneManager : MonoBehaviour
     {
         if (!context.performed) return;
         RotateActiveTiles(60);
-    }
-
-    public void OnFlip(InputAction.CallbackContext context)
-    {
-        lock (_lock)
-        {
-            if (!context.performed) return;
-            switch (_state)
-            {
-                case State.Grabbing:
-                case State.Blueprint:
-                    Debug.Log("TilingSceneManager#OnFlip");
-                    FlipActiveTiles();
-                    break;
-                default:
-                    break;
-            }
-        }
     }
 
     public void OnCopy(InputAction.CallbackContext context)
@@ -975,7 +937,7 @@ public class TilingSceneManager : MonoBehaviour
         {
             case State.None:
                 if (_isKeyModify2) return;
-                GrabTiles(MakeTiles(new TileMemory[] { new TileMemory(WorldPointToNearestOblique(_mousePos), _currentColorPaletteColor) }), false);
+                GrabTiles(MakeTiles(new TileMemory[] { new TileMemory(_mousePos, _currentColorPaletteColor) }), false);
                 ChangeState(State.Grabbing);
                 break;
             default:
@@ -1059,7 +1021,7 @@ public class TilingSceneManager : MonoBehaviour
                     case State.Blueprint:
                         {
                             // put as much as possible.
-                            var tiles = ActiveTiles.Children().Where(x => !_partialHexTable.ContainsAny(x.GetComponent<Tile>().ExportMemory().PartialHexes())).ToArray();
+                            var tiles = ActiveTiles.Children().ToArray();
                             if (!UpdateBoardWithHistory(Action.Put, tiles))
                             {
                                 Debug.LogWarning("TilingSceneManager#onClick#State.Blueprint: something wrong.");
@@ -1172,11 +1134,6 @@ public class TilingSceneManager : MonoBehaviour
         }
     }
 
-    void OnRulerToggle(bool isOn)
-    {
-        BackGround.SetActive(!isOn);
-    }
-
     void OnColorPaletteColorToggle(int i, bool isOn)
     {
         if (isOn)
@@ -1283,9 +1240,7 @@ public class TilingSceneManager : MonoBehaviour
         if (!context.performed) return;
         Debug.Log("TilingSceneManager#OnDebug");
         Board board = new Board();
-        board.GrabingTiles = ActiveTiles.Children().Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
         board.PlacedTiles = PlacedTiles.Children().Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        board.PartialHexes = _partialHexTable.ToArray();
         board.ColorPalette = _colorPaletteColorImages.Select(x => x.color).ToArray();
         _persistentManager.Save(System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".log", board, true);
         Debug.Log("TilingSceneManager#OnDebug#histories");

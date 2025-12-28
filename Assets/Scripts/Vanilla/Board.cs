@@ -6,9 +6,7 @@ using UnityEngine;
 public class Board
 {
 
-    public TileMemory[] GrabingTiles;    // for only debug.
     public TileMemory[] PlacedTiles;
-    public PartialHex[] PartialHexes;    // for only puzzle creation.
     public Color[] ColorPalette;
 
     public Board()

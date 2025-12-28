@@ -1,6 +1,5 @@
 using UnityEngine;
 
-using static MathHex;
 using static Colors;
 
 public class Tile : MonoBehaviour
@@ -42,22 +41,15 @@ public class Tile : MonoBehaviour
 
     TileMemory readTransformFromMemory()
     {
-        this.transform.position = ObliqueToWorldPoint(_memory.Position);
-        this.transform.Rotate(0, 0, _memory.Rotation * 60);
-        if (_memory.IsFlip)
-        {
-            Vector3 scale = this.transform.localScale;
-            scale.x *= -1;
-            this.transform.localScale = scale;
-        }
+        this.transform.position = _memory.Position;
+        this.transform.Rotate(0, 0, _memory.Rotation * 30);
         return _memory;
     }
 
     TileMemory writeTransformToMemory()
     {
-        _memory.Position = WorldPointToNearestOblique(transform.position);
-        _memory.Rotation = ((360 + (int)transform.eulerAngles.z + 1) / 60) % 6;
-        _memory.IsFlip = transform.lossyScale.x < 0;
+        _memory.Position = transform.position;
+        _memory.Rotation = ((360 + (int)transform.eulerAngles.z + 1) / 30) % 12;
         return _memory;
     }
 
@@ -75,11 +67,6 @@ public class Tile : MonoBehaviour
     public void RestoreColor()
     {
         ChangeColor(_memory.Color);
-    }
-
-    public PartialHex[] PartialHexes()
-    {
-        return writeTransformToMemory().PartialHexes();
     }
 
     public TileMemory ExportMemory()
