@@ -29,20 +29,20 @@ public class Edge
         return e.P - this.P;
     }
 
-    // スナップ用: 寛容な閾値で辺の一致を判定
+    // Edge matching for snapping with a lenient threshold
     public bool NearlyEqual(Edge e)
     {
         return P.NearlyEqual(e.P) && Q.NearlyEqual(e.Q);
     }
 
-    // 衝突判定用: スナップ後の共有辺のみスキップするための厳密な一致判定
+    // Strict equality for skipping shared edges during collision detection (post-snap)
     public bool StrictlyEqual(Edge e)
     {
         float tol = 0.0001f;
         return (P - e.P).sqrMagnitude < tol && (Q - e.Q).sqrMagnitude < tol;
     }
 
-    // 頂点を共有しているか（スナップ後の厳密な一致）
+    // Whether the edges share a vertex (strict post-snap comparison)
     public bool SharesVertex(Edge e)
     {
         float tol = 0.0001f;

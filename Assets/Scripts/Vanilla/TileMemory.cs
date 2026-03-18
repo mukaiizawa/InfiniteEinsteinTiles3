@@ -63,21 +63,6 @@ public class TileMemory
         return edges;
     }
 
-    // 衝突判定用：通常辺 + 重心から各頂点への放射状セグメント。
-    // 放射状セグメントが多角形内部を埋めるため、凹部の重なりも辺の交差で検出できる。
-    public Edge[] EdgesForCollision()
-    {
-        Vector2[] vertices = VerticesTable[this.Rotation].Select(p => p.ToVector2() + this.Position).ToArray();
-        Vector2 c = Centroid();
-        Edge[] edges = new Edge[EdgeCount * 2];
-        for (int i = 0; i < EdgeCount; i++)
-        {
-            edges[i] = new Edge(vertices[i], vertices[(i + 1) % EdgeCount]);
-            edges[EdgeCount + i] = new Edge(c, vertices[i]);
-        }
-        return edges;
-    }
-
     public Vector2[] Vertices()
     {
         return VerticesTable[this.Rotation].Select(p => p.ToVector2() + this.Position).ToArray();
@@ -92,7 +77,7 @@ public class TileMemory
         return sum / EdgeCount;
     }
 
-    // ray casting による点の包含判定。
+    // Point-in-polygon test via ray casting.
     public bool ContainsPoint(Vector2 point)
     {
         Vector2[] verts = Vertices();

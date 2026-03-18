@@ -342,19 +342,30 @@ public class TilingSceneManager : MonoBehaviour
     bool UpdateBoardWithHistory(Action action, GameObject[] tiles)
     {
         Vector2 dr;
-        return UpdateBoardWithHistory(action, tiles, out dr);
+        bool[] placedMask;
+        return UpdateBoardWithHistory(action, tiles, out dr, out placedMask);
     }
 
     bool UpdateBoardWithHistory(Action action, GameObject[] tiles, out Vector2 dr)
     {
+        bool[] placedMask;
+        return UpdateBoardWithHistory(action, tiles, out dr, out placedMask);
+    }
+
+    // placedMask[i] indicates whether tiles[i] was successfully placed.
+    // Returns false only if no tile could be placed at all.
+    bool UpdateBoardWithHistory(Action action, GameObject[] tiles, out Vector2 dr, out bool[] placedMask)
+    {
         Debug.Log("TilingSceneManager#UpdateBoardWithHistory: " + action);
         dr = Vector2.zero;
+        placedMask = new bool[tiles.Length];
         var memories = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
         if (action == Action.Remove)
         {
             UpdateBoard(action, memories);
             _histories.Push(Tuple.Create(action, memories, Color.white));
             _undoHistories.Clear();
+            for (int i = 0; i < placedMask.Length; i++) placedMask[i] = true;
             return true;
         }
         // action == Action.Put
@@ -364,7 +375,7 @@ public class TilingSceneManager : MonoBehaviour
         var alignEdges = existingMems
             .SelectMany(m => m.Edges())
             .ToArray();
-        // 既存タイルがある場合のみアライン・衝突判定を行う（最初の1枚は自由配置）
+        // Only run alignment/collision when existing tiles are present (first tile is free placement)
         if (existingMems.Length > 0)
         {
             if (!FindAlignment(memories, alignEdges, existingMems, out dr))
@@ -377,6 +388,29 @@ public class TilingSceneManager : MonoBehaviour
                 var offset = dr;
                 memories = memories.Select(m => { var s = new TileMemory().CopyFrom(m); s.Position += offset; return s; }).ToArray();
             }
+            // Check each tile individually for collision; place only non-colliding ones.
+            var acceptedMems = new List<TileMemory>();
+            for (int i = 0; i < memories.Length; i++)
+            {
+                if (!HasCollisionSingle(memories[i], existingMems))
+                {
+                    placedMask[i] = true;
+                    acceptedMems.Add(memories[i]);
+                    // Add to existingMems so subsequent tiles also check against just-placed ones.
+                    existingMems = existingMems.Append(memories[i]).ToArray();
+                }
+            }
+            if (acceptedMems.Count == 0)
+            {
+                _audioManager.PlaySE(_assetManager.SETileCannotPut);
+                return false;
+            }
+            memories = acceptedMems.ToArray();
+        }
+        else
+        {
+            // First tile(s), free placement — all tiles are placed.
+            for (int i = 0; i < placedMask.Length; i++) placedMask[i] = true;
         }
         if (!UpdateBoard(action, memories))
         {
@@ -405,10 +439,9 @@ public class TilingSceneManager : MonoBehaviour
         return true;
     }
 
-    // タイルを既存タイルの辺にスナップさせるオフセット dr を返す。
-    // タイルを既存タイルの辺にスナップさせるオフセット dr を返す。
-    // alignEdges: スナップ用（寛容なNearlyEqualで一致を探す）
-    // 有効な配置が見つからない場合は false を返す。
+    // Compute an offset dr that snaps new tiles to an existing edge.
+    // alignEdges: candidate edges matched via lenient NearlyEqual.
+    // Returns false if no valid placement is found.
     bool FindAlignment(TileMemory[] newMems, Edge[] alignEdges, TileMemory[] existingMems, out Vector2 dr)
     {
         foreach (var mem in newMems)
@@ -420,12 +453,11 @@ public class TilingSceneManager : MonoBehaviour
                     if (!edge.NearlyEqual(existing)) continue;
                     dr = edge.GetAlignmentVector(existing);
                     var offset = dr;
-                    var shifted = newMems.Select(m => {
-                        var s = new TileMemory().CopyFrom(m);
-                        s.Position += offset;
-                        return s;
-                    }).ToArray();
-                    if (!HasCollision(shifted, existingMems))
+                    // Check only the snapping tile for collision;
+                    // other tiles in the group are checked individually by the caller.
+                    var snapped = new TileMemory().CopyFrom(mem);
+                    snapped.Position += offset;
+                    if (!HasCollisionSingle(snapped, existingMems))
                         return true;
                 }
             }
@@ -434,35 +466,35 @@ public class TilingSceneManager : MonoBehaviour
         return false;
     }
 
-    // スナップ後のタイル群が既存タイルと衝突するか判定する。
-    // - 同一位置への重複配置
-    // - 辺の幾何学的交差（StrictlyEqualで共有辺のみスキップ）
-    // - 重心の包含（凹部で辺交差なしの重なりを補完）
-    // タイルの重心間距離がこの値以上なら衝突しない（タイル外接円半径の2倍）
+    // Check whether snapped tiles collide with existing tiles.
+    // - Duplicate placement at the same position
+    // - Geometric edge intersection (shared edges skipped via StrictlyEqual)
+    // - Centroid containment (catches concave overlaps with no edge crossing)
+    // Tile pairs farther apart than this squared distance cannot collide (~2x circumradius)
     static readonly float CollisionDistSq = 12f;
 
     bool HasCollision(TileMemory[] newMems, TileMemory[] existingMems)
     {
-        // タイルペア単位で判定し、遠いペアはバウンディング距離で早期スキップ
+        // Per-pair check; skip distant pairs via bounding distance
         foreach (var n in newMems)
         {
             Vector2 nc = n.Centroid();
             foreach (var e in existingMems)
             {
-                // 重心間距離による早期スキップ
+                // Early skip by centroid distance
                 Vector2 ec = e.Centroid();
                 if ((nc - ec).sqrMagnitude >= CollisionDistSq)
                     continue;
 
-                // 1. 同一タイル検出（同じ位置・同じ回転 = 完全重複）
+                // 1. Exact duplicate (same position and rotation)
                 if (n.Rotation == e.Rotation && (n.Position - e.Position).sqrMagnitude < 0.01f)
                     return true;
 
-                // 2. 重心の一致で重複検出（異なる回転でも重なるケース）
+                // 2. Centroid coincidence (overlapping even with different rotation)
                 if ((nc - ec).sqrMagnitude < 0.01f)
                     return true;
 
-                // 3. 辺の交差判定（共有辺・共有頂点をスキップ）
+                // 3. Edge intersection (skip shared edges/vertices)
                 var nEdges = n.Edges();
                 var eEdges = e.Edges();
                 foreach (var ne in nEdges)
@@ -470,7 +502,7 @@ public class TilingSceneManager : MonoBehaviour
                         if (!ne.StrictlyEqual(ee) && !ne.SharesVertex(ee) && ne.IsIntersect(ee))
                             return true;
 
-                // 4. 内部サンプル点の包含判定（凹部で辺交差なしの重なりを補完）
+                // 4. Interior sample-point containment (catches concave overlaps with no edge crossing)
                 const float inset = 0.05f;
                 Vector2[] nv = n.Vertices();
                 Vector2[] ev = e.Vertices();
@@ -483,6 +515,11 @@ public class TilingSceneManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    bool HasCollisionSingle(TileMemory n, TileMemory[] existingMems)
+    {
+        return HasCollision(new TileMemory[] { n }, existingMems);
     }
 
     void UpdateTileCount()
@@ -1140,20 +1177,26 @@ public class TilingSceneManager : MonoBehaviour
                             // TODO
                             // var tiles = ActiveTiles.Children().Where(x => !_partialHexTable.ContainsAny(x.GetComponent<Tile>().ExportMemory().PartialHexes())).ToArray();
                             Vector2 drBlueprint;
-                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drBlueprint))
+                            bool[] placedMask;
+                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drBlueprint, out placedMask))
                             {
                                 Debug.LogWarning("TilingSceneManager#onClick#State.Blueprint: something wrong.");
                                 return;
                             }
-                            PutTiles(CopyTiles(tiles), drBlueprint);
+                            var placedTiles = tiles.Where((t, i) => placedMask[i]).ToArray();
+                            PutTiles(CopyTiles(placedTiles), drBlueprint);
                         }
                         break;
                     case State.Grabbing:
                         {
                             var tiles = ActiveTiles.Children();
                             Vector2 drGrab;
-                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drGrab)) return;    // can't put.
-                            PutTiles(tiles, drGrab);
+                            bool[] placedMask;
+                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drGrab, out placedMask)) return;    // can't put any.
+                            var placedTiles = tiles.Where((t, i) => placedMask[i]).ToArray();
+                            var rejectedTiles = tiles.Where((t, i) => !placedMask[i]).ToArray();
+                            PutTiles(placedTiles, drGrab);
+                            foreach (var t in rejectedTiles) Destroy(t);
                             ChangeState(State.None);
                         }
                         break;
