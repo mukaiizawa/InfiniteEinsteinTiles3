@@ -204,13 +204,13 @@ public class TilingSceneManager : MonoBehaviour
         return tiles;
     }
 
-    void PutTiles(GameObject[] tiles)
+    void PutTiles(GameObject[] tiles, Vector2 dr = default)
     {
         _audioManager.PlaySE(_assetManager.SETilePut);
         foreach (GameObject tile in tiles)
         {
             tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            tile.transform.position = tile.transform.position;    // TODO: align position.
+            tile.transform.position += (Vector3)dr;
             tile.transform.parent = PlacedTiles.transform;
         }
     }
@@ -341,35 +341,42 @@ public class TilingSceneManager : MonoBehaviour
 
     bool UpdateBoardWithHistory(Action action, GameObject[] tiles)
     {
-        Debug.Log("TilingSceneManager#UpdateBoardWithHistory: " + action);
-        var allTiles = PlacedTiles.Children();
-        var allEdges = allTiles.SelectMany(x => x.GetComponent<Tile>().ExportMemory().Edges()).ToArray();
-        var edges = tiles.SelectMany(x => x.GetComponent<Tile>().ExportMemory().Edges());
-        Vector2 dr = Vector2.zero;
-        foreach (Edge edge in edges)
-        {
-            foreach (Edge edge2 in allEdges)
-            {
-                if (edge.NearlyEqual(edge2))
-                {
-                    dr = edge.GetAlignmentVector(edge2);
-                    break;
-                }
-            }
-        }
-        if (dr != Vector2.zero)
-        {
-            foreach (var tile in tiles)
-            {
-                tile.transform.position += (Vector3)dr;
-            }
-        }
+        Vector2 dr;
+        return UpdateBoardWithHistory(action, tiles, out dr);
+    }
 
+    bool UpdateBoardWithHistory(Action action, GameObject[] tiles, out Vector2 dr)
+    {
+        Debug.Log("TilingSceneManager#UpdateBoardWithHistory: " + action);
+        dr = Vector2.zero;
         var memories = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        // TODO: debug
-        foreach (var memory in memories)
+        if (action == Action.Remove)
         {
-            Debug.Log(memory.Position + string.Join(", ", memory.Edges().Select(edge => edge.ToString())));
+            UpdateBoard(action, memories);
+            _histories.Push(Tuple.Create(action, memories, Color.white));
+            _undoHistories.Clear();
+            return true;
+        }
+        // action == Action.Put
+        var existingMems = PlacedTiles.Children()
+            .Select(x => x.GetComponent<Tile>().ExportMemory())
+            .ToArray();
+        var alignEdges = existingMems
+            .SelectMany(m => m.Edges())
+            .ToArray();
+        // 既存タイルがある場合のみアライン・衝突判定を行う（最初の1枚は自由配置）
+        if (existingMems.Length > 0)
+        {
+            if (!FindAlignment(memories, alignEdges, existingMems, out dr))
+            {
+                _audioManager.PlaySE(_assetManager.SETileCannotPut);
+                return false;
+            }
+            if (dr != Vector2.zero)
+            {
+                var offset = dr;
+                memories = memories.Select(m => { var s = new TileMemory().CopyFrom(m); s.Position += offset; return s; }).ToArray();
+            }
         }
         if (!UpdateBoard(action, memories))
         {
@@ -398,18 +405,98 @@ public class TilingSceneManager : MonoBehaviour
         return true;
     }
 
+    // タイルを既存タイルの辺にスナップさせるオフセット dr を返す。
+    // タイルを既存タイルの辺にスナップさせるオフセット dr を返す。
+    // alignEdges: スナップ用（寛容なNearlyEqualで一致を探す）
+    // 有効な配置が見つからない場合は false を返す。
+    bool FindAlignment(TileMemory[] newMems, Edge[] alignEdges, TileMemory[] existingMems, out Vector2 dr)
+    {
+        foreach (var mem in newMems)
+        {
+            foreach (var edge in mem.Edges())
+            {
+                foreach (var existing in alignEdges)
+                {
+                    if (!edge.NearlyEqual(existing)) continue;
+                    dr = edge.GetAlignmentVector(existing);
+                    var offset = dr;
+                    var shifted = newMems.Select(m => {
+                        var s = new TileMemory().CopyFrom(m);
+                        s.Position += offset;
+                        return s;
+                    }).ToArray();
+                    if (!HasCollision(shifted, existingMems))
+                        return true;
+                }
+            }
+        }
+        dr = Vector2.zero;
+        return false;
+    }
+
+    // スナップ後のタイル群が既存タイルと衝突するか判定する。
+    // - 同一位置への重複配置
+    // - 辺の幾何学的交差（StrictlyEqualで共有辺のみスキップ）
+    // - 重心の包含（凹部で辺交差なしの重なりを補完）
+    // タイルの重心間距離がこの値以上なら衝突しない（タイル外接円半径の2倍）
+    static readonly float CollisionDistSq = 12f;
+
+    bool HasCollision(TileMemory[] newMems, TileMemory[] existingMems)
+    {
+        // タイルペア単位で判定し、遠いペアはバウンディング距離で早期スキップ
+        foreach (var n in newMems)
+        {
+            Vector2 nc = n.Centroid();
+            foreach (var e in existingMems)
+            {
+                // 重心間距離による早期スキップ
+                Vector2 ec = e.Centroid();
+                if ((nc - ec).sqrMagnitude >= CollisionDistSq)
+                    continue;
+
+                // 1. 同一タイル検出（同じ位置・同じ回転 = 完全重複）
+                if (n.Rotation == e.Rotation && (n.Position - e.Position).sqrMagnitude < 0.01f)
+                    return true;
+
+                // 2. 重心の一致で重複検出（異なる回転でも重なるケース）
+                if ((nc - ec).sqrMagnitude < 0.01f)
+                    return true;
+
+                // 3. 辺の交差判定（共有辺・共有頂点をスキップ）
+                var nEdges = n.Edges();
+                var eEdges = e.Edges();
+                foreach (var ne in nEdges)
+                    foreach (var ee in eEdges)
+                        if (!ne.StrictlyEqual(ee) && !ne.SharesVertex(ee) && ne.IsIntersect(ee))
+                            return true;
+
+                // 4. 内部サンプル点の包含判定（凹部で辺交差なしの重なりを補完）
+                const float inset = 0.05f;
+                Vector2[] nv = n.Vertices();
+                Vector2[] ev = e.Vertices();
+                for (int i = 0; i < nv.Length; i++)
+                    if (e.ContainsPoint(Vector2.Lerp(nv[i], nc, inset)))
+                        return true;
+                for (int i = 0; i < ev.Length; i++)
+                    if (n.ContainsPoint(Vector2.Lerp(ev[i], ec, inset)))
+                        return true;
+            }
+        }
+        return false;
+    }
+
     void UpdateTileCount()
     {
-        int n = 99;    // TODO
+        int n = PlacedTiles.transform.childCount;
         switch (GlobalData.GameMode)
         {
             case GameMode.Creative:
                 TextTileCount.text = $"{n}";
                 break;
             case GameMode.Puzzle:
-                var N = 999;    // TODO
+                var N = _answerBoard != null ? _answerBoard.PlacedTileCount() : 0;
                 TextTileCount.text = $"{n} / {N}";
-                TextTileCount.color = n == N? Colors.OK: n > N? Colors.NG: Color.white;
+                TextTileCount.color = n == N ? Colors.OK : n > N ? Colors.NG : Color.white;
                 break;
             default:
                 break;
@@ -1052,19 +1139,21 @@ public class TilingSceneManager : MonoBehaviour
                             var tiles = ActiveTiles.Children().ToArray();
                             // TODO
                             // var tiles = ActiveTiles.Children().Where(x => !_partialHexTable.ContainsAny(x.GetComponent<Tile>().ExportMemory().PartialHexes())).ToArray();
-                            if (!UpdateBoardWithHistory(Action.Put, tiles))
+                            Vector2 drBlueprint;
+                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drBlueprint))
                             {
                                 Debug.LogWarning("TilingSceneManager#onClick#State.Blueprint: something wrong.");
                                 return;
                             }
-                            PutTiles(CopyTiles(tiles));
+                            PutTiles(CopyTiles(tiles), drBlueprint);
                         }
                         break;
                     case State.Grabbing:
                         {
                             var tiles = ActiveTiles.Children();
-                            if (!UpdateBoardWithHistory(Action.Put, tiles)) return;    // can't put.
-                            PutTiles(tiles);
+                            Vector2 drGrab;
+                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drGrab)) return;    // can't put.
+                            PutTiles(tiles, drGrab);
                             ChangeState(State.None);
                         }
                         break;
