@@ -372,32 +372,26 @@ public class TilingSceneManager : MonoBehaviour
         var existingMems = PlacedTiles.Children()
             .Select(x => x.GetComponent<Tile>().ExportMemory())
             .ToArray();
-        var alignEdges = existingMems
-            .SelectMany(m => m.Edges())
-            .ToArray();
-        // Only run alignment/collision when existing tiles are present (first tile is free placement)
         if (existingMems.Length > 0)
         {
-            if (!FindAlignment(memories, alignEdges, existingMems, out dr))
+            if (TryVertexSnap(memories, existingMems, out dr))
             {
-                _audioManager.PlaySE(_assetManager.SETileCannotPut);
-                return false;
+                for (int i = 0; i < memories.Length; i++)
+                {
+                    var snapped = new TileMemory().CopyFrom(memories[i]);
+                    snapped.Position += dr;
+                    memories[i] = snapped;
+                }
             }
-            if (dr != Vector2.zero)
-            {
-                var offset = dr;
-                memories = memories.Select(m => { var s = new TileMemory().CopyFrom(m); s.Position += offset; return s; }).ToArray();
-            }
-            // Check each tile individually for collision; place only non-colliding ones.
+            var existingMemsList = new List<TileMemory>(existingMems);
             var acceptedMems = new List<TileMemory>();
             for (int i = 0; i < memories.Length; i++)
             {
-                if (!HasCollisionSingle(memories[i], existingMems))
+                if (!HasCollisionSingle(memories[i], existingMemsList))
                 {
                     placedMask[i] = true;
                     acceptedMems.Add(memories[i]);
-                    // Add to existingMems so subsequent tiles also check against just-placed ones.
-                    existingMems = existingMems.Append(memories[i]).ToArray();
+                    existingMemsList.Add(memories[i]);
                 }
             }
             if (acceptedMems.Count == 0)
@@ -409,7 +403,6 @@ public class TilingSceneManager : MonoBehaviour
         }
         else
         {
-            // First tile(s), free placement — all tiles are placed.
             for (int i = 0; i < placedMask.Length; i++) placedMask[i] = true;
         }
         if (!UpdateBoard(action, memories))
@@ -439,32 +432,34 @@ public class TilingSceneManager : MonoBehaviour
         return true;
     }
 
-    // Compute an offset dr that snaps new tiles to an existing edge.
-    // alignEdges: candidate edges matched via lenient NearlyEqual.
-    // Returns false if no valid placement is found.
-    bool FindAlignment(TileMemory[] newMems, Edge[] alignEdges, TileMemory[] existingMems, out Vector2 dr)
+    // Vertex-based snap: find the closest (new vertex, existing vertex) pair.
+    // If the distance is within GlobalData.Tolerance, return the snap offset.
+    bool TryVertexSnap(TileMemory[] newMems, TileMemory[] existingMems, out Vector2 dr)
     {
+        dr = Vector2.zero;
+        float bestSqr = GlobalData.Tolerance; // threshold (squared distance comparison via NearlyEqual convention)
         foreach (var mem in newMems)
         {
-            foreach (var edge in mem.Edges())
+            foreach (var nv in mem.Vertices())
             {
-                foreach (var existing in alignEdges)
+                foreach (var existing in existingMems)
                 {
-                    if (!edge.NearlyEqual(existing)) continue;
-                    dr = edge.GetAlignmentVector(existing);
-                    var offset = dr;
-                    // Check only the snapping tile for collision;
-                    // other tiles in the group are checked individually by the caller.
-                    var snapped = new TileMemory().CopyFrom(mem);
-                    snapped.Position += offset;
-                    if (!HasCollisionSingle(snapped, existingMems))
-                        return true;
+                    foreach (var ev in existing.Vertices())
+                    {
+                        float sqr = (nv - ev).sqrMagnitude;
+                        if (sqr < bestSqr)
+                        {
+                            bestSqr = sqr;
+                            dr = ev - nv;
+                        }
+                    }
                 }
             }
         }
-        dr = Vector2.zero;
-        return false;
+        return dr != Vector2.zero;
     }
+
+
 
     // Check whether snapped tiles collide with existing tiles.
     // - Duplicate placement at the same position
@@ -473,7 +468,7 @@ public class TilingSceneManager : MonoBehaviour
     // Tile pairs farther apart than this squared distance cannot collide (~2x circumradius)
     static readonly float CollisionDistSq = 12f;
 
-    bool HasCollision(TileMemory[] newMems, TileMemory[] existingMems)
+    bool HasCollision(TileMemory[] newMems, IReadOnlyList<TileMemory> existingMems)
     {
         // Per-pair check; skip distant pairs via bounding distance
         foreach (var n in newMems)
@@ -517,7 +512,7 @@ public class TilingSceneManager : MonoBehaviour
         return false;
     }
 
-    bool HasCollisionSingle(TileMemory n, TileMemory[] existingMems)
+    bool HasCollisionSingle(TileMemory n, IReadOnlyList<TileMemory> existingMems)
     {
         return HasCollision(new TileMemory[] { n }, existingMems);
     }

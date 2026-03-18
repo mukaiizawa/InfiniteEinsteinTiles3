@@ -24,17 +24,6 @@ public class Edge
         PQ = Q - P;
     }
 
-    public Vector2 GetAlignmentVector(Edge e)
-    {
-        return e.P - this.P;
-    }
-
-    // Edge matching for snapping with a lenient threshold
-    public bool NearlyEqual(Edge e)
-    {
-        return P.NearlyEqual(e.P) && Q.NearlyEqual(e.Q);
-    }
-
     // Strict equality for skipping shared edges during collision detection (post-snap)
     public bool StrictlyEqual(Edge e)
     {
