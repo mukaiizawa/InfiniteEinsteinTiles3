@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
+[InitializeOnLoad]
 public static class FullscreenGameView
 {
     static int DISPLAY_0 = 0; // typical gameview display
@@ -12,6 +13,21 @@ public static class FullscreenGameView
     static EditorWindow _instance;
     static readonly Type GameViewType = Type.GetType("UnityEditor.GameView,UnityEditor");
     static readonly PropertyInfo ShowToolbarProperty = GameViewType.GetProperty("showToolbar", BindingFlags.Instance | BindingFlags.NonPublic);
+
+    static FullscreenGameView()
+    {
+        AssemblyReloadEvents.beforeAssemblyReload += OnBeforeAssemblyReload;
+    }
+
+    static void OnBeforeAssemblyReload()
+    {
+        if (_instance != null)
+        {
+            _instance.Close();
+            _instance = null;
+            SetGameViewTargetDisplay(DISPLAY_0);
+        }
+    }
 
     static void SetGameViewTargetDisplay( int displayIndex)
     {
