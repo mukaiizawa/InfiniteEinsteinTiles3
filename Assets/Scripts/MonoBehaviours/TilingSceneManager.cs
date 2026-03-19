@@ -26,6 +26,12 @@ public class TilingSceneManager : MonoBehaviour
         Paint,
     }
 
+    enum Record
+    {
+        Enabled,
+        Disabled,
+    }
+
     enum State
     {
         None,
@@ -204,31 +210,83 @@ public class TilingSceneManager : MonoBehaviour
         return tiles;
     }
 
-    void PutTiles(GameObject[] tiles, Vector2 dr = default)
+    int PutTiles(GameObject[] tiles, Record record)
     {
+        Debug.Log("TilingSceneManager#PutTiles");
         _audioManager.PlaySE(_assetManager.SETilePut);
-        foreach (GameObject tile in tiles)
+        Vector2 dr = Vector2.zero;
+        var memories = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
+        var existingMems = PlacedTiles.Children().Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
+        if (existingMems.Length > 0)
+        {
+            if (TryVertexSnap(memories, existingMems, out dr))
+            {
+                for (int i = 0; i < memories.Length; i++)
+                {
+                    var snapped = new TileMemory().CopyFrom(memories[i]);
+                    snapped.Position += dr;
+                    memories[i] = snapped;
+                }
+            }
+            var acceptedMems = new List<TileMemory>();
+            for (int i = 0; i < memories.Length; i++)
+            {
+                if (!HasCollisionSingle(memories[i], existingMems))
+                {
+                    acceptedMems.Add(memories[i]);
+                }
+            }
+            if (acceptedMems.Count == 0)
+            {
+                _audioManager.PlaySE(_assetManager.SETileCannotPut);
+                return 0;
+            }
+            memories = acceptedMems.ToArray();
+        }
+        if (record == Record.Enabled)
+        {
+            _histories.Push(Tuple.Create(Action.Put, memories, Color.white));
+            _undoHistories.Clear();
+        }
+        foreach (GameObject tile in MakeTiles(memories))
         {
             tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            tile.transform.position += (Vector3)dr;
             tile.transform.parent = PlacedTiles.transform;
         }
+        UpdateTileCount();
+        switch (GlobalData.GameMode)
+        {
+            case GameMode.Puzzle:
+                if (false)    // TODO: puzzle complete
+                    ChangeState(State.Solved);
+                break;
+            default:
+                break;
+        }
+        return memories.Length;
     }
 
-    void RemoveTiles(GameObject[] tiles, bool isPlacedTiles)
+    void RemoveTiles(GameObject[] tiles, Record record)
     {
         _audioManager.PlaySE(_assetManager.SETileRemove);
-        if (isPlacedTiles)
-            UpdateBoardWithHistory(Action.Remove, tiles);
+        if (record == Record.Enabled)
+        {
+            _histories.Push(Tuple.Create(Action.Remove, tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray(), Color.white));
+            _undoHistories.Clear();
+        }
         foreach (GameObject tile in tiles)
             Destroy(tile);
+        UpdateTileCount();
     }
 
-    void GrabTiles(GameObject[] tiles, bool isPlacedTiles)
+    void GrabTiles(GameObject[] tiles, Record record)
     {
         _audioManager.PlaySE(_assetManager.SETileGrab);
-        if (isPlacedTiles)
-            UpdateBoardWithHistory(Action.Remove, tiles);
+        if (record == Record.Enabled)
+        {
+            _histories.Push(Tuple.Create(Action.Remove, tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray(), Color.white));
+            _undoHistories.Clear();
+        }
         var minX = tiles.Min(o => o.transform.position.x);
         var maxX = tiles.Max(o => o.transform.position.x);
         var minY = tiles.Min(o => o.transform.position.y);
@@ -239,6 +297,7 @@ public class TilingSceneManager : MonoBehaviour
             tile.GetComponent<SpriteRenderer>().sortingOrder = 10;
             tile.transform.parent = ActiveTiles.transform;
         }
+        UpdateTileCount();
     }
 
     IEnumerator RotateActiveTilesAsync(GameObject[] tiles, int angle)
@@ -298,8 +357,8 @@ public class TilingSceneManager : MonoBehaviour
     void ScatterTiles()
     {
         var activeTiles = ActiveTiles.Children();
-        PutTiles(CopyTiles(activeTiles));
-        RemoveTiles(activeTiles, false);
+        PutTiles(activeTiles, Record.Disabled);
+        RemoveTiles(activeTiles, Record.Disabled);
         foreach (var tile in PlacedTiles.Children())
             tile.AddComponent<RotatingProjectile>();
     }
@@ -329,107 +388,21 @@ public class TilingSceneManager : MonoBehaviour
         }
         // put or remove.
         if (isUndo) action = (action == Action.Put)? Action.Remove: Action.Put;
-        UpdateBoard(action, memories);
-        if (action == Action.Put) PutTiles(MakeTiles(memories));
+        if (action == Action.Put)
+        {
+            foreach (GameObject tile in MakeTiles(memories))
+            {
+                tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                tile.transform.parent = PlacedTiles.transform;
+            }
+        }
         else
         {
             var targetPositions = memories.Select(x => x.Position).ToHashSet();
             foreach (GameObject tile in PlacedTiles.Children().Where(x => targetPositions.Contains(x.GetComponent<Tile>().ExportMemory().Position)))
                 Destroy(tile);
         }
-    }
-
-    bool UpdateBoardWithHistory(Action action, GameObject[] tiles)
-    {
-        Vector2 dr;
-        bool[] placedMask;
-        return UpdateBoardWithHistory(action, tiles, out dr, out placedMask);
-    }
-
-    bool UpdateBoardWithHistory(Action action, GameObject[] tiles, out Vector2 dr)
-    {
-        bool[] placedMask;
-        return UpdateBoardWithHistory(action, tiles, out dr, out placedMask);
-    }
-
-    // placedMask[i] indicates whether tiles[i] was successfully placed.
-    // Returns false only if no tile could be placed at all.
-    bool UpdateBoardWithHistory(Action action, GameObject[] tiles, out Vector2 dr, out bool[] placedMask)
-    {
-        Debug.Log("TilingSceneManager#UpdateBoardWithHistory: " + action);
-        dr = Vector2.zero;
-        placedMask = new bool[tiles.Length];
-        var memories = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        if (action == Action.Remove)
-        {
-            UpdateBoard(action, memories);
-            _histories.Push(Tuple.Create(action, memories, Color.white));
-            _undoHistories.Clear();
-            for (int i = 0; i < placedMask.Length; i++) placedMask[i] = true;
-            return true;
-        }
-        // action == Action.Put
-        var existingMems = PlacedTiles.Children()
-            .Select(x => x.GetComponent<Tile>().ExportMemory())
-            .ToArray();
-        if (existingMems.Length > 0)
-        {
-            if (TryVertexSnap(memories, existingMems, out dr))
-            {
-                for (int i = 0; i < memories.Length; i++)
-                {
-                    var snapped = new TileMemory().CopyFrom(memories[i]);
-                    snapped.Position += dr;
-                    memories[i] = snapped;
-                }
-            }
-            var existingMemsList = new List<TileMemory>(existingMems);
-            var acceptedMems = new List<TileMemory>();
-            for (int i = 0; i < memories.Length; i++)
-            {
-                if (!HasCollisionSingle(memories[i], existingMemsList))
-                {
-                    placedMask[i] = true;
-                    acceptedMems.Add(memories[i]);
-                    existingMemsList.Add(memories[i]);
-                }
-            }
-            if (acceptedMems.Count == 0)
-            {
-                _audioManager.PlaySE(_assetManager.SETileCannotPut);
-                return false;
-            }
-            memories = acceptedMems.ToArray();
-        }
-        else
-        {
-            for (int i = 0; i < placedMask.Length; i++) placedMask[i] = true;
-        }
-        if (!UpdateBoard(action, memories))
-        {
-            _audioManager.PlaySE(_assetManager.SETileCannotPut);
-            return false;
-        }
-        _histories.Push(Tuple.Create(action, memories, Color.white));
-        _undoHistories.Clear();
-        switch (GlobalData.GameMode)
-        {
-            case GameMode.Puzzle:
-                if (false)    // TODO: puzzle complete
-                {
-                    _audioManager.PlaySE(_assetManager.SEPuzzleComplete);
-                    ScatterTiles();
-                    PuzzleFrame.SetActive(false);
-                    _persistentManager.SaveProgress(GlobalData.Slot, new Progress(Math.Max(GlobalData.Level, _persistentManager.LoadProgress(GlobalData.Slot).CurrentLevel)));
-                    _persistentManager.SaveSolution(UpdatedSolution());
-                    ChangeState(State.Solved);
-                    return false;
-                }
-                break;
-            default:
-                break;
-        }
-        return true;
+        UpdateTileCount();
     }
 
     // Vertex-based snap: find the closest (new vertex, existing vertex) pair.
@@ -458,8 +431,6 @@ public class TilingSceneManager : MonoBehaviour
         }
         return dr != Vector2.zero;
     }
-
-
 
     // Check whether snapped tiles collide with existing tiles.
     // - Duplicate placement at the same position
@@ -533,23 +504,6 @@ public class TilingSceneManager : MonoBehaviour
             default:
                 break;
         }
-    }
-
-    bool UpdateBoard(Action action, TileMemory[] memories)
-    {
-        Debug.Log("TilingSceneManager#UpdateBoard: " + action);
-        switch (action)
-        {
-            case Action.Put:
-                // TODO
-                if (false) return false;    // failed to put.
-                break;
-            case Action.Remove:
-                // TODO
-                break;
-        }
-        UpdateTileCount();
-        return true;
     }
 
     void ReloadScene()
@@ -643,6 +597,11 @@ public class TilingSceneManager : MonoBehaviour
                 ConfirmExitPanel.SetActive(true);
                 break;
             case State.Solved:
+                _audioManager.PlaySE(_assetManager.SEPuzzleComplete);
+                ScatterTiles();
+                PuzzleFrame.SetActive(false);
+                _persistentManager.SaveProgress(GlobalData.Slot, new Progress(Math.Max(GlobalData.Level, _persistentManager.LoadProgress(GlobalData.Slot).CurrentLevel)));
+                _persistentManager.SaveSolution(UpdatedSolution());
                 SolvedPanel.SetActive(true);
                 break;
             case State.TimeOver:
@@ -829,12 +788,7 @@ public class TilingSceneManager : MonoBehaviour
         }
         if (GlobalData.IsRestart) GlobalData.IsRestart = false;
         else if (GlobalData.Solution.Board.PlacedTiles != null)
-        {
-            var memories = GlobalData.Solution.Board.PlacedTiles;
-            UpdateBoard(Action.Put, memories);
-            PutTiles(MakeTiles(memories));
-        }
-        UpdateTileCount();
+            PutTiles(MakeTiles(GlobalData.Solution.Board.PlacedTiles), Record.Disabled);
 #if UNITY_EDITOR
 #else
         var origin = GameObject.Find("/Origin");
@@ -1011,13 +965,13 @@ public class TilingSceneManager : MonoBehaviour
                     var o = CursorObject();
                     if (Tags.match(o, Tags.Tile))
                     {
-                        GrabTiles(CopyTiles(new GameObject[] { o }), false);
+                        GrabTiles(CopyTiles(new GameObject[] { o }), Record.Disabled);
                         ChangeState(State.Grabbing);
                     }
                     break;
                 case State.Selected:
                     Debug.Log("TilingSceneManager#OnCopy");
-                    GrabTiles(BlueprintTiles(CopyTiles(UnselectTiles(CollectSelectedTiles()))), false);
+                    GrabTiles(BlueprintTiles(CopyTiles(UnselectTiles(CollectSelectedTiles()))), Record.Disabled);
                     ChangeState(State.Blueprint);
                     break;
                 default:
@@ -1035,7 +989,7 @@ public class TilingSceneManager : MonoBehaviour
             {
                 case State.Selected:
                     Debug.Log("TilingSceneManager#OnCut");
-                    GrabTiles(BlueprintTiles(UnselectTiles(CollectSelectedTiles())), true);
+                    GrabTiles(BlueprintTiles(UnselectTiles(CollectSelectedTiles())), Record.Enabled);
                     ChangeState(State.Blueprint);
                     break;
                 default:
@@ -1057,15 +1011,15 @@ public class TilingSceneManager : MonoBehaviour
             {
                 case State.None:
                     var o = CursorObject();
-                    if (Tags.match(o, Tags.Tile)) RemoveTiles(new GameObject[] { o }, true);
+                    if (Tags.match(o, Tags.Tile)) RemoveTiles(new GameObject[] { o }, Record.Enabled);
                     break;
                 case State.Blueprint:
                 case State.Grabbing:
-                    RemoveTiles(ActiveTiles.Children(), false);
+                    RemoveTiles(ActiveTiles.Children(), Record.Disabled);
                     ChangeState(State.None);
                     break;
                 case State.Selected:
-                    RemoveTiles(CollectSelectedTiles(), true);
+                    RemoveTiles(CollectSelectedTiles(), Record.Enabled);
                     ChangeState(State.None);
                     break;
                 default:
@@ -1084,7 +1038,7 @@ public class TilingSceneManager : MonoBehaviour
         {
             case State.None:
                 if (_isKeyModify2) return;
-                GrabTiles(MakeTiles(new TileMemory[] { new TileMemory(_mousePos, _currentColorPaletteColor) }), false);
+                GrabTiles(MakeTiles(new TileMemory[] { new TileMemory(_mousePos, _currentColorPaletteColor) }), Record.Disabled);
                 ChangeState(State.Grabbing);
                 break;
             default:
@@ -1138,7 +1092,7 @@ public class TilingSceneManager : MonoBehaviour
                             var o = ClickedObject();
                             if (Tags.match(o, Tags.Tile))
                             {
-                                GrabTiles(new GameObject[]{ o }, true);
+                                GrabTiles(new GameObject[]{ o }, Record.Enabled);
                                 ChangeState(State.Grabbing);
                             }
                         }
@@ -1166,33 +1120,16 @@ public class TilingSceneManager : MonoBehaviour
                         }
                         break;
                     case State.Blueprint:
-                        {
-                            // put as much as possible.
-                            var tiles = ActiveTiles.Children().ToArray();
-                            // TODO
-                            // var tiles = ActiveTiles.Children().Where(x => !_partialHexTable.ContainsAny(x.GetComponent<Tile>().ExportMemory().PartialHexes())).ToArray();
-                            Vector2 drBlueprint;
-                            bool[] placedMask;
-                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drBlueprint, out placedMask))
-                            {
-                                Debug.LogWarning("TilingSceneManager#onClick#State.Blueprint: something wrong.");
-                                return;
-                            }
-                            var placedTiles = tiles.Where((t, i) => placedMask[i]).ToArray();
-                            PutTiles(CopyTiles(placedTiles), drBlueprint);
-                        }
+                        PutTiles(ActiveTiles.Children(), Record.Enabled);
                         break;
                     case State.Grabbing:
                         {
                             var tiles = ActiveTiles.Children();
-                            Vector2 drGrab;
-                            bool[] placedMask;
-                            if (!UpdateBoardWithHistory(Action.Put, tiles, out drGrab, out placedMask)) return;    // can't put any.
-                            var placedTiles = tiles.Where((t, i) => placedMask[i]).ToArray();
-                            var rejectedTiles = tiles.Where((t, i) => !placedMask[i]).ToArray();
-                            PutTiles(placedTiles, drGrab);
-                            foreach (var t in rejectedTiles) Destroy(t);
-                            ChangeState(State.None);
+                            if (PutTiles(tiles, Record.Enabled) > 0)
+                            {
+                                RemoveTiles(tiles, Record.Disabled);
+                                ChangeState(State.None);
+                            }
                         }
                         break;
                     case State.Paint:
@@ -1367,7 +1304,7 @@ public class TilingSceneManager : MonoBehaviour
                 break;
             case State.Blueprint:
             case State.Grabbing:
-                RemoveTiles(ActiveTiles.Children(), false);
+                RemoveTiles(ActiveTiles.Children(), Record.Disabled);
                 ChangeState(State.None);
                 break;
             case State.Paint:
