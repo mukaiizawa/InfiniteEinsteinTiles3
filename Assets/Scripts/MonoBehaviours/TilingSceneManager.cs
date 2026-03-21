@@ -231,7 +231,7 @@ public class TilingSceneManager : MonoBehaviour
             var acceptedMems = new List<TileMemory>();
             for (int i = 0; i < memories.Length; i++)
             {
-                if (!HasCollisionSingle(memories[i], existingMems))
+                if (!HasCollision(memories[i], existingMems))
                 {
                     acceptedMems.Add(memories[i]);
                 }
@@ -439,47 +439,35 @@ public class TilingSceneManager : MonoBehaviour
     // Tile pairs farther apart than this squared distance cannot collide (~2x circumradius)
     static readonly float CollisionDistSq = 12f;
 
-    bool HasCollision(TileMemory[] newMems, IReadOnlyList<TileMemory> existingMems)
+    bool HasCollision(TileMemory n, IReadOnlyList<TileMemory> existingMems)
     {
-        // Per-pair check; skip distant pairs via bounding distance
-        foreach (var n in newMems)
+        foreach (var e in existingMems)
         {
-            foreach (var e in existingMems)
-            {
-                // Early skip by position distance
-                if ((n.Position - e.Position).sqrMagnitude >= CollisionDistSq)
-                    continue;
-
-                // 1. Position coincidence (duplicate or overlapping with different rotation)
-                if ((n.Position - e.Position).sqrMagnitude < 0.01f)
+            // Early skip by position distance
+            if ((n.Position - e.Position).sqrMagnitude >= CollisionDistSq)
+                continue;
+            // 1. Position coincidence (duplicate or overlapping with different rotation)
+            if ((n.Position - e.Position).sqrMagnitude < 0.01f)
+                return true;
+            // 2. Edge intersection (skip shared edges/vertices)
+            var nEdges = n.Edges();
+            var eEdges = e.Edges();
+            foreach (var ne in nEdges)
+                foreach (var ee in eEdges)
+                    if (!ne.StrictlyEqual(ee) && !ne.SharesVertex(ee) && ne.IsIntersect(ee))
+                        return true;
+            // 3. Interior sample-point containment (catches concave overlaps with no edge crossing)
+            const float inset = 0.05f;
+            Vector2[] nv = n.Vertices();
+            Vector2[] ev = e.Vertices();
+            for (int i = 0; i < nv.Length; i++)
+                if (e.ContainsPoint(Vector2.Lerp(nv[i], n.Position, inset)))
                     return true;
-
-                // 2. Edge intersection (skip shared edges/vertices)
-                var nEdges = n.Edges();
-                var eEdges = e.Edges();
-                foreach (var ne in nEdges)
-                    foreach (var ee in eEdges)
-                        if (!ne.StrictlyEqual(ee) && !ne.SharesVertex(ee) && ne.IsIntersect(ee))
-                            return true;
-
-                // 3. Interior sample-point containment (catches concave overlaps with no edge crossing)
-                const float inset = 0.05f;
-                Vector2[] nv = n.Vertices();
-                Vector2[] ev = e.Vertices();
-                for (int i = 0; i < nv.Length; i++)
-                    if (e.ContainsPoint(Vector2.Lerp(nv[i], n.Position, inset)))
-                        return true;
-                for (int i = 0; i < ev.Length; i++)
-                    if (n.ContainsPoint(Vector2.Lerp(ev[i], e.Position, inset)))
-                        return true;
-            }
+            for (int i = 0; i < ev.Length; i++)
+                if (n.ContainsPoint(Vector2.Lerp(ev[i], e.Position, inset)))
+                    return true;
         }
         return false;
-    }
-
-    bool HasCollisionSingle(TileMemory n, IReadOnlyList<TileMemory> existingMems)
-    {
-        return HasCollision(new TileMemory[] { n }, existingMems);
     }
 
     void UpdateTileCount()
