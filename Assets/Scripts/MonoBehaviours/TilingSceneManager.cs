@@ -433,9 +433,9 @@ public class TilingSceneManager : MonoBehaviour
     }
 
     // Check whether snapped tiles collide with existing tiles.
-    // - Duplicate placement at the same position
+    // - Position coincidence (duplicate or overlapping)
     // - Geometric edge intersection (shared edges skipped via StrictlyEqual)
-    // - Centroid containment (catches concave overlaps with no edge crossing)
+    // - Interior point containment (catches concave overlaps with no edge crossing)
     // Tile pairs farther apart than this squared distance cannot collide (~2x circumradius)
     static readonly float CollisionDistSq = 12f;
 
@@ -444,23 +444,17 @@ public class TilingSceneManager : MonoBehaviour
         // Per-pair check; skip distant pairs via bounding distance
         foreach (var n in newMems)
         {
-            Vector2 nc = n.Centroid();
             foreach (var e in existingMems)
             {
-                // Early skip by centroid distance
-                Vector2 ec = e.Centroid();
-                if ((nc - ec).sqrMagnitude >= CollisionDistSq)
+                // Early skip by position distance
+                if ((n.Position - e.Position).sqrMagnitude >= CollisionDistSq)
                     continue;
 
-                // 1. Exact duplicate (same position and rotation)
-                if (n.Rotation == e.Rotation && (n.Position - e.Position).sqrMagnitude < 0.01f)
+                // 1. Position coincidence (duplicate or overlapping with different rotation)
+                if ((n.Position - e.Position).sqrMagnitude < 0.01f)
                     return true;
 
-                // 2. Centroid coincidence (overlapping even with different rotation)
-                if ((nc - ec).sqrMagnitude < 0.01f)
-                    return true;
-
-                // 3. Edge intersection (skip shared edges/vertices)
+                // 2. Edge intersection (skip shared edges/vertices)
                 var nEdges = n.Edges();
                 var eEdges = e.Edges();
                 foreach (var ne in nEdges)
@@ -468,15 +462,15 @@ public class TilingSceneManager : MonoBehaviour
                         if (!ne.StrictlyEqual(ee) && !ne.SharesVertex(ee) && ne.IsIntersect(ee))
                             return true;
 
-                // 4. Interior sample-point containment (catches concave overlaps with no edge crossing)
+                // 3. Interior sample-point containment (catches concave overlaps with no edge crossing)
                 const float inset = 0.05f;
                 Vector2[] nv = n.Vertices();
                 Vector2[] ev = e.Vertices();
                 for (int i = 0; i < nv.Length; i++)
-                    if (e.ContainsPoint(Vector2.Lerp(nv[i], nc, inset)))
+                    if (e.ContainsPoint(Vector2.Lerp(nv[i], n.Position, inset)))
                         return true;
                 for (int i = 0; i < ev.Length; i++)
-                    if (n.ContainsPoint(Vector2.Lerp(ev[i], ec, inset)))
+                    if (n.ContainsPoint(Vector2.Lerp(ev[i], e.Position, inset)))
                         return true;
             }
         }

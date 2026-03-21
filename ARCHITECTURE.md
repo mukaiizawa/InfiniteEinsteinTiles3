@@ -39,17 +39,14 @@ User places tile(s)
 
 **Purpose**: Determine whether the newly placed tile(s) overlap with any existing tiles after snapping.
 
-**Early Skip**: If the squared distance between the centroids of a tile pair is ≥ `CollisionDistSq = 12f` (roughly twice the circumscribed circle radius of a tile), the pair cannot collide and is skipped.
+**Early Skip**: If the squared distance between the positions of a tile pair is ≥ `CollisionDistSq = 12f` (roughly twice the circumscribed circle radius of a tile), the pair cannot collide and is skipped.
 
 **Multi-stage Detection** (executed sequentially for each tile pair):
 
-### Stage 1: Exact Duplicate Detection
-Same `Position` and same `Rotation` → the tiles are identical, so this is a collision.
+### Stage 1: Position Coincidence Detection
+If the squared distance between positions is `< 0.01f` → the tiles are treated as overlapping (covers both exact duplicates and different-rotation overlaps).
 
-### Stage 2: Centroid Coincidence Detection
-If the squared distance between centroids is `< 0.01f` → the tiles are treated as overlapping, even if their rotations differ.
-
-### Stage 3: Edge Intersection Test
+### Stage 2: Edge Intersection Test
 Check whether any edges of the new tile intersect with edges of the existing tile.
 - Skip shared edges (edges common to adjacent tiles) via `Edge.StrictlyEqual()`
 - Skip edges that share a vertex via `Edge.SharesVertex()` (vertex-touching between adjacent tiles is not an intersection)
@@ -65,10 +62,10 @@ Intersection ⟺ d1 and d2 have opposite signs AND d3 and d4 have opposite signs
 ```
 When an endpoint lies exactly on the other segment (d = 0), it is not counted as an intersection (safely excludes shared-vertex cases).
 
-### Stage 4: Interior Point Containment Test
+### Stage 3: Interior Point Containment Test
 Complements the edge intersection test for cases it cannot detect — specifically when the tile is a concave polygon and one tile fits entirely within the concavity of another.
 
-- For each vertex, generate a sample point offset slightly inward (`inset = 0.05f`) toward the centroid.
+- For each vertex, generate a sample point offset slightly inward (`inset = 0.05f`) toward the tile's position.
 - Test whether that sample point lies inside the other tile using ray casting.
 - This check is performed in both directions (new → existing and existing → new).
 
@@ -90,5 +87,4 @@ For each edge of the polygon, count how many times a rightward ray from the test
 - Vertex coordinates are precomputed for all 12 rotations (30° increments)
 - `EdgeCount = 14` (equal to the vertex count; the polygon is closed, so edge count = vertex count)
 - `Edges()`: returns the 14 edges (used for both snapping and collision detection)
-- `Centroid()`: arithmetic mean of all vertices
 - `Vertices()`: vertex array in world coordinates

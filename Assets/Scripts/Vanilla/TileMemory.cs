@@ -68,15 +68,6 @@ public class TileMemory
         return VerticesTable[this.Rotation].Select(p => p.ToVector2() + this.Position).ToArray();
     }
 
-    public Vector2 Centroid()
-    {
-        Vector2[] verts = Vertices();
-        Vector2 sum = Vector2.zero;
-        for (int i = 0; i < EdgeCount; i++)
-            sum += verts[i];
-        return sum / EdgeCount;
-    }
-
     // Point-in-polygon test via ray casting.
     public bool ContainsPoint(Vector2 point)
     {
