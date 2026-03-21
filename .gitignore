@@ -28,6 +28,9 @@
 # Visual Studio cache directory
 .vs/
 
+# Claude Code local settings
+.claude/
+
 # Gradle cache directory
 .gradle/
 
