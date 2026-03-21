@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Infinite Einstein Tiles3** is a Unity game (version 6000.0.35f1) about placing aperiodic "einstein" monotiles (hat-shaped 14-sided polygons) on an infinite canvas. It is published on Steam. The game has two modes: Creative (free placement) and Puzzle (complete a target tiling pattern within constraints).
+**Infinite Einstein Tiles3** is a Unity game (version 6000.0.35f1) about placing aperiodic "einstein" monotiles (spectre-shaped 14-sided polygons) on an infinite canvas. It is published on Steam. The game has two modes: Creative (free placement) and Puzzle (complete a target tiling pattern within constraints).
 
 ## Building
 
@@ -56,7 +56,7 @@ All manager components live on a single root GameObject per scene via `GetCompon
 
 ### Vanilla (pure C#, no Unity dependency except serialization) (`Assets/Scripts/Vanilla/`)
 
-- **`TileMemory`** — serializable struct for a tile: `Position` (Vector2), `Rotation` (int 0–11, each step = 30°), `Color`. Owns the `VerticesTable` (12 pre-rotated vertex sets for the 14-sided hat polygon). Computes `Edge[]` arrays for placement validation.
+- **`TileMemory`** — serializable struct for a tile: `Position` (Vector2), `Rotation` (int 0–11, each step = 30°), `Color`. Owns the `VerticesTable` (12 pre-rotated vertex sets for the 14-sided spectre polygon). Computes `Edge[]` arrays for placement validation.
 - **`Edge`** — a directed segment between two Vector2 points, canonicalized so P.x ≤ Q.x. Used for adjacency checking via `NearlyEqual()`.
 - **`Board`** — serializable container: `TileMemory[]` + `Color[]` (30-color palette).
 - **`Solution`** — serializable save file unit. Fields: `Name`, `CreatedAt`, `UpdatedAt`, `Board`. Non-serialized fields (`GameMode`, `Slot`, `Level`, `PhysicalName`) are set at load time.
