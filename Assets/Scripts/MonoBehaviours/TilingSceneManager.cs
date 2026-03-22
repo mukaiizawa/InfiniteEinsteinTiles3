@@ -34,7 +34,8 @@ public class TilingSceneManager : MonoBehaviour
 
     enum State
     {
-        None,
+        Init,
+        Idle,
         Menu,
         Setting,
         ConfirmRestart,
@@ -259,16 +260,7 @@ public class TilingSceneManager : MonoBehaviour
             _undoHistories.Clear();
         }
         SpawnTiles(memories);
-        UpdateTileCount();
-        switch (GlobalData.GameMode)
-        {
-            case GameMode.Puzzle:
-                if (record == Record.Enabled && IsPuzzleSolved())
-                    ChangeState(State.Solved);
-                break;
-            default:
-                break;
-        }
+        UpdateTileCountAndCheckSolved();
         return memories.Length;
     }
 
@@ -295,7 +287,7 @@ public class TilingSceneManager : MonoBehaviour
             tile.transform.SetParent(null);
             Destroy(tile);
         }
-        UpdateTileCount();
+        UpdateTileCountAndCheckSolved();
     }
 
     void GrabTiles(GameObject[] tiles, Record record)
@@ -316,7 +308,8 @@ public class TilingSceneManager : MonoBehaviour
             tile.GetComponent<SpriteRenderer>().sortingOrder = 10;
             tile.transform.parent = ActiveTiles.transform;
         }
-        UpdateTileCount();
+        if (record == Record.Enabled)
+            UpdateTileCountAndCheckSolved();
     }
 
     IEnumerator RotateActiveTilesAsync(GameObject[] tiles, int angle)
@@ -375,9 +368,11 @@ public class TilingSceneManager : MonoBehaviour
 
     void ScatterTiles()
     {
-        var activeTiles = ActiveTiles.Children();
-        PutTiles(activeTiles, Record.Disabled);
-        RemoveTiles(activeTiles, Record.Disabled);
+        foreach (var tile in ActiveTiles.Children())
+        {
+            tile.GetComponent<SpriteRenderer>().sortingOrder = 0;
+            tile.transform.SetParent(PlacedTiles.transform);
+        }
         foreach (var tile in PlacedTiles.Children())
             tile.AddComponent<RotatingProjectile>();
     }
@@ -417,7 +412,7 @@ public class TilingSceneManager : MonoBehaviour
             foreach (GameObject tile in PlacedTiles.Children().Where(x => targetPositions.Contains(x.GetComponent<Tile>().ExportMemory().Position)))
                 Destroy(tile);
         }
-        UpdateTileCount();
+        UpdateTileCountAndCheckSolved();
     }
 
     // Vertex-based snap: find the closest (new vertex, existing vertex) pair.
@@ -493,7 +488,7 @@ public class TilingSceneManager : MonoBehaviour
         return false;
     }
 
-    void UpdateTileCount()
+    void UpdateTileCountAndCheckSolved()
     {
         int n = PlacedTiles.transform.childCount;
         switch (GlobalData.GameMode)
@@ -505,6 +500,8 @@ public class TilingSceneManager : MonoBehaviour
                 var N = _answerBoard != null ? _answerBoard.PlacedTileCount() : 0;
                 TextTileCount.text = $"{n} / {N}";
                 TextTileCount.color = n == N ? Colors.OK : n > N ? Colors.NG : Color.white;
+                if (_state != State.Init && _state != State.Solved && IsPuzzleSolved())
+                    ChangeState(State.Solved);
                 break;
             default:
                 break;
@@ -571,7 +568,7 @@ public class TilingSceneManager : MonoBehaviour
         ChangeUsage(to);
         switch (to)
         {
-            case State.None:
+            case State.Idle:
                 OriginTile.SetActive(true);
                 Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
                 ColorPalettePanel.SetActive(false);
@@ -603,10 +600,10 @@ public class TilingSceneManager : MonoBehaviour
                 break;
             case State.Solved:
                 _audioManager.PlaySE(_assetManager.SEPuzzleComplete);
-                ScatterTiles();
                 PuzzleFrame.SetActive(false);
                 _persistentManager.SaveProgress(GlobalData.Slot, new Progress(Math.Max(GlobalData.Level, _persistentManager.LoadProgress(GlobalData.Slot).CurrentLevel)));
                 _persistentManager.SaveSolution(UpdatedSolution());
+                ScatterTiles();
                 SolvedPanel.SetActive(true);
                 break;
             case State.TimeOver:
@@ -669,21 +666,21 @@ public class TilingSceneManager : MonoBehaviour
         TextTimer.gameObject.SetActive(GlobalData.GameMode == GameMode.Puzzle && GlobalData.IsHardcoreMode);
         OriginTile.GetComponent<Button>().onClick.AddListener(OnOriginTileClick);
         MenuOpenButton.onClick.AddListener(() => ChangeState(State.Menu));
-        MenuCloseButton.onClick.AddListener(() => ChangeState(State.None));
+        MenuCloseButton.onClick.AddListener(() => ChangeState(State.Idle));
         SettingOpenButton.onClick.AddListener(() => ChangeState(State.Setting));
         SettingCloseButton.onClick.AddListener(() => ChangeState(State.Menu));
         CameraButton.onClick.AddListener(() => StartCoroutine(CaptureScreenshotCoroutine()));
         ColorPaletteOpenButton.onClick.AddListener(OnColorPaletteOpenButtonClick);
-        ColorPaletteCloseButton.onClick.AddListener(() => ChangeState(State.None));
+        ColorPaletteCloseButton.onClick.AddListener(() => ChangeState(State.Idle));
         PipetteButton.onClick.AddListener(() => ChangeState(State.Pipette));
         RestartButton.onClick.AddListener(() => ChangeState(State.ConfirmRestart));
         RestartConfirmOKButton.onClick.AddListener(ReloadScene);
-        RestartConfirmCancelButton.onClick.AddListener(() => ChangeState(State.None));
+        RestartConfirmCancelButton.onClick.AddListener(() => ChangeState(State.Idle));
         ExitWithoutSaveButton.onClick.AddListener(() => ChangeState(State.ConfirmExit));
         SaveAndExitButton.onClick.AddListener(() => LoadPrevScene(withSave: true));
         SaveAndExitButton.gameObject.SetActive(!(GlobalData.GameMode == GameMode.Puzzle && GlobalData.IsHardcoreMode));    // disable save button in hardcore.
         ExitConfirmOKButton.onClick.AddListener(() => LoadPrevScene(withSave: false));
-        ExitConfirmCancelButton.onClick.AddListener(() => ChangeState(State.None));
+        ExitConfirmCancelButton.onClick.AddListener(() => ChangeState(State.Idle));
         ContinueToMenuButton.onClick.AddListener(() => LoadPrevScene(withSave: false));
         ContinueToMenuButton2.onClick.AddListener(() => LoadPrevScene(withSave: false));
         // color picker.
@@ -794,7 +791,7 @@ public class TilingSceneManager : MonoBehaviour
         else if (GlobalData.Solution.Board.PlacedTiles != null)
         {
             SpawnTiles(GlobalData.Solution.Board.PlacedTiles);
-            UpdateTileCount();
+            UpdateTileCountAndCheckSolved();
         }
 #if UNITY_EDITOR
 #else
@@ -802,7 +799,7 @@ public class TilingSceneManager : MonoBehaviour
         if (origin != null) origin.SetActive(false);
         TextMode.gameObject.SetActive(false);
 #endif
-        ChangeState(State.None);
+        ChangeState(State.Idle);
     }
 
     void FixedUpdate()
@@ -863,7 +860,7 @@ public class TilingSceneManager : MonoBehaviour
         }
         switch (_state)
         {
-            case State.None:
+            case State.Idle:
             case State.Grabbing:
             case State.Selecting:
             case State.Selected:
@@ -968,7 +965,7 @@ public class TilingSceneManager : MonoBehaviour
             if (!context.performed) return;
             switch (_state)
             {
-                case State.None:
+                case State.Idle:
                     var o = CursorObject();
                     if (Tags.match(o, Tags.Tile))
                     {
@@ -1016,18 +1013,18 @@ public class TilingSceneManager : MonoBehaviour
             if (!context.performed) return;
             switch (_state)
             {
-                case State.None:
+                case State.Idle:
                     var o = CursorObject();
                     if (Tags.match(o, Tags.Tile)) RemoveTiles(new GameObject[] { o }, Record.Enabled);
                     break;
                 case State.Blueprint:
                 case State.Grabbing:
                     RemoveTiles(ActiveTiles.Children(), Record.Disabled);
-                    ChangeState(State.None);
+                    ChangeState(State.Idle);
                     break;
                 case State.Selected:
                     RemoveTiles(CollectSelectedTiles(), Record.Enabled);
-                    ChangeState(State.None);
+                    ChangeState(State.Idle);
                     break;
                 default:
                     break;
@@ -1043,7 +1040,7 @@ public class TilingSceneManager : MonoBehaviour
     {
         switch (_state)
         {
-            case State.None:
+            case State.Idle:
                 if (_isKeyModify2) return;
                 GrabTiles(MakeTiles(new TileMemory[] { new TileMemory(_mousePos, _currentColorPaletteColor) }), Record.Disabled);
                 ChangeState(State.Grabbing);
@@ -1062,7 +1059,7 @@ public class TilingSceneManager : MonoBehaviour
                 Debug.Log("TilingSceneManager#OnClick#button down:"+Time.time);
                 switch (_state)
                 {
-                    case State.None:
+                    case State.Idle:
                         if (_isKeyModify2)
                         {
                             _selectStartPos = _mousePos;
@@ -1094,7 +1091,7 @@ public class TilingSceneManager : MonoBehaviour
                 }
                 switch (_state)
                 {
-                    case State.None:
+                    case State.Idle:
                         {
                             var o = ClickedObject();
                             if (Tags.match(o, Tags.Tile))
@@ -1116,13 +1113,13 @@ public class TilingSceneManager : MonoBehaviour
                                 else if (Tags.match(o, Tags.SelectedTile))
                                 {
                                     UnselectTiles(new GameObject[] { o });
-                                    if (!ExistsSelectedTile()) ChangeState(State.None);
+                                    if (!ExistsSelectedTile()) ChangeState(State.Idle);
                                 }
                             }
                             else
                             {
                                 UnselectTiles(CollectSelectedTiles());
-                                ChangeState(State.None);
+                                ChangeState(State.Idle);
                             }
                         }
                         break;
@@ -1135,7 +1132,7 @@ public class TilingSceneManager : MonoBehaviour
                             if (PutTiles(tiles, Record.Enabled) > 0)
                             {
                                 RemoveTiles(tiles, Record.Disabled);
-                                ChangeState(State.None);
+                                ChangeState(State.Idle);
                             }
                         }
                         break;
@@ -1179,7 +1176,7 @@ public class TilingSceneManager : MonoBehaviour
                                 ChangeState(State.Selected);
                                 return;
                             }
-                            ChangeState(State.None);
+                            ChangeState(State.Idle);
                         }
                         break;
                     default:
@@ -1200,7 +1197,7 @@ public class TilingSceneManager : MonoBehaviour
             if (!context.performed) return;
             switch (_state)
             {
-                case State.None:
+                case State.Idle:
                     if (_histories.TryPop(out Tuple<Action, TileMemory[], Color> historyRecord))
                     {
                         Debug.Log("TilingSceneManager#OnUndo");
@@ -1221,7 +1218,7 @@ public class TilingSceneManager : MonoBehaviour
             if (!context.performed) return;
             switch (_state)
             {
-                case State.None:
+                case State.Idle:
                     if (_undoHistories.TryPop(out Tuple<Action, TileMemory[], Color> historyRecord))
                     {
                         Debug.Log("TilingSceneManager#OnRedo");
@@ -1248,11 +1245,11 @@ public class TilingSceneManager : MonoBehaviour
     {
         switch (_state)
         {
-            case State.None:
+            case State.Idle:
                 ChangeState(State.Paint);
                 break;
             case State.Paint:
-                ChangeState(State.None);
+                ChangeState(State.Idle);
                 break;
             default:
                 break;
@@ -1296,26 +1293,26 @@ public class TilingSceneManager : MonoBehaviour
         if (!context.performed) return;
         switch (_state)
         {
-            case State.None:
+            case State.Idle:
                 ChangeState(State.Menu);
                 break;
             case State.Menu:
-                ChangeState(State.None);
+                ChangeState(State.Idle);
                 break;
             case State.Setting:
                 ChangeState(State.Menu);
                 break;
             case State.Selected:
                 UnselectTiles(CollectSelectedTiles());
-                ChangeState(State.None);
+                ChangeState(State.Idle);
                 break;
             case State.Blueprint:
             case State.Grabbing:
                 RemoveTiles(ActiveTiles.Children(), Record.Disabled);
-                ChangeState(State.None);
+                ChangeState(State.Idle);
                 break;
             case State.Paint:
-                ChangeState(State.None);
+                ChangeState(State.Idle);
                 break;
             case State.Pipette:
                 ChangeState(State.Paint);
