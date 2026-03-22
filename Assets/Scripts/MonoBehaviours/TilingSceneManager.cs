@@ -161,6 +161,7 @@ public class TilingSceneManager : MonoBehaviour
      * board
      */
     Board _answerBoard;
+    Edge[] _answerOuterEdges;
     ConcurrentStack<Tuple<Action, TileMemory[], Color>> _histories = new ConcurrentStack<Tuple<Action, TileMemory[], Color>>();
     ConcurrentStack<Tuple<Action, TileMemory[], Color>> _undoHistories = new ConcurrentStack<Tuple<Action, TileMemory[], Color>>();
 
@@ -217,7 +218,7 @@ public class TilingSceneManager : MonoBehaviour
         Vector2 dr = Vector2.zero;
         var memories = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
         var existingMems = PlacedTiles.Children().Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        if (existingMems.Length > 0)
+        if (existingMems.Length > 0 || _answerOuterEdges != null)
         {
             if (TryVertexSnap(memories, existingMems, out dr))
             {
@@ -257,13 +258,22 @@ public class TilingSceneManager : MonoBehaviour
         switch (GlobalData.GameMode)
         {
             case GameMode.Puzzle:
-                if (PlacedTiles.Children().Count() == _answerBoard.PlacedTiles.Count())
+                if (IsPuzzleSolved())
                     ChangeState(State.Solved);
                 break;
             default:
                 break;
         }
         return memories.Length;
+    }
+
+    bool IsPuzzleSolved()
+    {
+        var placedEdges = PlacedTiles.Children()
+            .Select(t => t.GetComponent<Tile>().ExportMemory())
+            .SelectMany(m => m.Edges())
+            .ToList();
+        return _answerOuterEdges.All(outer => placedEdges.Any(e => e.StrictlyEqual(outer)));
     }
 
     void RemoveTiles(GameObject[] tiles, Record record)
@@ -411,20 +421,20 @@ public class TilingSceneManager : MonoBehaviour
     {
         dr = Vector2.zero;
         float bestSqr = GlobalData.Tolerance; // threshold (squared distance comparison via NearlyEqual convention)
+        var snapVertices = existingMems.SelectMany(m => m.Vertices());
+        if (_answerOuterEdges != null)
+            snapVertices = snapVertices.Concat(_answerOuterEdges.SelectMany(e => new[] { e.P, e.Q }));
         foreach (var mem in newMems)
         {
             foreach (var nv in mem.Vertices())
             {
-                foreach (var existing in existingMems)
+                foreach (var ev in snapVertices)
                 {
-                    foreach (var ev in existing.Vertices())
+                    float sqr = (nv - ev).sqrMagnitude;
+                    if (sqr < bestSqr)
                     {
-                        float sqr = (nv - ev).sqrMagnitude;
-                        if (sqr < bestSqr)
-                        {
-                            bestSqr = sqr;
-                            dr = ev - nv;
-                        }
+                        bestSqr = sqr;
+                        dr = ev - nv;
                     }
                 }
             }
@@ -466,6 +476,14 @@ public class TilingSceneManager : MonoBehaviour
             for (int i = 0; i < ev.Length; i++)
                 if (n.ContainsPoint(Vector2.Lerp(ev[i], e.Position, inset)))
                     return true;
+        }
+        // 4. Frame boundary check: reject tiles crossing outer edges
+        if (_answerOuterEdges != null)
+        {
+            foreach (var ne in n.Edges())
+                foreach (var oe in _answerOuterEdges)
+                    if (!ne.StrictlyEqual(oe) && !ne.SharesVertex(oe) && ne.IsIntersect(oe))
+                        return true;
         }
         return false;
     }
@@ -753,6 +771,7 @@ public class TilingSceneManager : MonoBehaviour
                             break;
                     }
                     _answerBoard = _assetManager.LoadBoard(GlobalData.Level);
+                    _answerOuterEdges = _answerBoard.OuterEdges();
                     StartCoroutine(_assetManager.LoadPuzzleFrameAsync(GlobalData.Level, Color.gray, (sprite) => {
                         PuzzleFrame.SetActive(true);
                         var renderer = PuzzleFrame.GetComponent<SpriteRenderer>();
