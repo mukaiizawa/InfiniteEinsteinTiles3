@@ -189,6 +189,15 @@ public class TilingSceneManager : MonoBehaviour
         return GameObject.FindGameObjectsWithTag(Tags.SelectedTile);
     }
 
+    void SpawnTiles(TileMemory[] memories)
+    {
+        foreach (GameObject tile in MakeTiles(memories))
+        {
+            tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
+            tile.transform.parent = PlacedTiles.transform;
+        }
+    }
+
     GameObject[] MakeTiles(TileMemory[] memories)
     {
         return memories.Select(memory => {
@@ -249,16 +258,12 @@ public class TilingSceneManager : MonoBehaviour
             _histories.Push(Tuple.Create(Action.Put, memories, Color.white));
             _undoHistories.Clear();
         }
-        foreach (GameObject tile in MakeTiles(memories))
-        {
-            tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
-            tile.transform.parent = PlacedTiles.transform;
-        }
+        SpawnTiles(memories);
         UpdateTileCount();
         switch (GlobalData.GameMode)
         {
             case GameMode.Puzzle:
-                if (IsPuzzleSolved())
+                if (record == Record.Enabled && IsPuzzleSolved())
                     ChangeState(State.Solved);
                 break;
             default:
@@ -400,11 +405,7 @@ public class TilingSceneManager : MonoBehaviour
         if (isUndo) action = (action == Action.Put)? Action.Remove: Action.Put;
         if (action == Action.Put)
         {
-            foreach (GameObject tile in MakeTiles(memories))
-            {
-                tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
-                tile.transform.parent = PlacedTiles.transform;
-            }
+            SpawnTiles(memories);
         }
         else
         {
@@ -787,7 +788,10 @@ public class TilingSceneManager : MonoBehaviour
         }
         if (GlobalData.IsRestart) GlobalData.IsRestart = false;
         else if (GlobalData.Solution.Board.PlacedTiles != null)
-            PutTiles(MakeTiles(GlobalData.Solution.Board.PlacedTiles), Record.Disabled);
+        {
+            SpawnTiles(GlobalData.Solution.Board.PlacedTiles);
+            UpdateTileCount();
+        }
 #if UNITY_EDITOR
 #else
         var origin = GameObject.Find("/Origin");
