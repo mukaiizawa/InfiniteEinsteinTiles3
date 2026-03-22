@@ -32,7 +32,6 @@ public class AssetManager : MonoBehaviour
      */
     public AudioClip BGMTitle;
     public AudioClip BGMMenu;
-    public AudioClip BGMPuzzleMenu;
     public AudioClip BGMTiling0;
     public AudioClip BGMTiling1;
     public AudioClip BGMTiling2;
@@ -41,11 +40,6 @@ public class AssetManager : MonoBehaviour
     public AudioClip BGMTiling5;
     public AudioClip BGMTiling6;
     public AudioClip BGMTiling7;
-    public AudioClip BGMTiling8;
-    public AudioClip BGMTiling9;
-    public AudioClip BGMTiling10;
-    public AudioClip BGMTiling11;
-    public AudioClip BGMTiling12;
     public AudioClip SEOK;
     public AudioClip SECancel;
     public AudioClip SEOnHoverUI;
@@ -65,9 +59,8 @@ public class AssetManager : MonoBehaviour
             case LoadingManager.Scene.Title:
                 return new AudioClip[] { BGMTitle };
             case LoadingManager.Scene.Menu:
-                return new AudioClip[] { BGMMenu };
             case LoadingManager.Scene.PuzzleMenu:
-                return new AudioClip[] { BGMPuzzleMenu };
+                return new AudioClip[] { BGMMenu };
             case LoadingManager.Scene.Tiling:
                 return new AudioClip[] {
                     BGMTiling0,
@@ -78,11 +71,6 @@ public class AssetManager : MonoBehaviour
                     BGMTiling5,
                     BGMTiling6,
                     BGMTiling7,
-                    BGMTiling8,
-                    BGMTiling9,
-                    BGMTiling10,
-                    BGMTiling11,
-                    BGMTiling12,
                 };
             default:
                 return Array.Empty<AudioClip>();
