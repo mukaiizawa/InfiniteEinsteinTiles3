@@ -274,7 +274,7 @@ public class TilingSceneManager : MonoBehaviour
 
     bool IsPuzzleSolved()
     {
-        if (PlacedTiles.childCount != _answerBoard.PlacedTileCount()) return false;
+        if (PlacedTiles.transform.childCount != _answerBoard.PlacedTileCount()) return false;
         var placedEdges = PlacedTiles.Children()
             .Select(t => t.GetComponent<Tile>().ExportMemory())
             .SelectMany(m => m.Edges())
