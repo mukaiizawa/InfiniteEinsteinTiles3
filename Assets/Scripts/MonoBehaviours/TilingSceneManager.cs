@@ -257,7 +257,7 @@ public class TilingSceneManager : MonoBehaviour
         switch (GlobalData.GameMode)
         {
             case GameMode.Puzzle:
-                if (false)    // TODO: puzzle complete
+                if (PlacedTiles.Children().Count() == _answerBoard.PlacedTiles.Count())
                     ChangeState(State.Solved);
                 break;
             default:
@@ -639,10 +639,8 @@ public class TilingSceneManager : MonoBehaviour
         if (GlobalData.GameMode == GameMode.Nil)
         {
             GlobalData.GameMode = GameMode.Creative;
-            // TODO
-            GlobalData.Solution = _persistentManager.LoadSolutions(GameMode.Creative, -1, -1)[0];
-            // LoadPrevScene(false);
-            // return;
+            LoadPrevScene(withSave: false);
+            return;
         }
 #endif
         TextTimer.gameObject.SetActive(GlobalData.GameMode == GameMode.Puzzle && GlobalData.IsHardcoreMode);
@@ -659,12 +657,12 @@ public class TilingSceneManager : MonoBehaviour
         RestartConfirmOKButton.onClick.AddListener(ReloadScene);
         RestartConfirmCancelButton.onClick.AddListener(() => ChangeState(State.None));
         ExitWithoutSaveButton.onClick.AddListener(() => ChangeState(State.ConfirmExit));
-        SaveAndExitButton.onClick.AddListener(() => LoadPrevScene(true));
+        SaveAndExitButton.onClick.AddListener(() => LoadPrevScene(withSave: true));
         SaveAndExitButton.gameObject.SetActive(!(GlobalData.GameMode == GameMode.Puzzle && GlobalData.IsHardcoreMode));    // disable save button in hardcore.
-        ExitConfirmOKButton.onClick.AddListener(() => LoadPrevScene(false));
+        ExitConfirmOKButton.onClick.AddListener(() => LoadPrevScene(withSave: false));
         ExitConfirmCancelButton.onClick.AddListener(() => ChangeState(State.None));
-        ContinueToMenuButton.onClick.AddListener(() => LoadPrevScene(false));
-        ContinueToMenuButton2.onClick.AddListener(() => LoadPrevScene(false));
+        ContinueToMenuButton.onClick.AddListener(() => LoadPrevScene(withSave: false));
+        ContinueToMenuButton2.onClick.AddListener(() => LoadPrevScene(withSave: false));
         // color picker.
         {
             foreach (var slider in ColorPickerSliders)
@@ -765,7 +763,7 @@ public class TilingSceneManager : MonoBehaviour
             default:
                 Debug.LogWarning($"TilingSceneManager#Start: Unexpected GameMode {GlobalData.GameMode}");
                 GlobalData.GameMode = GameMode.Creative;
-                LoadPrevScene(false);
+                LoadPrevScene(withSave: false);
                 return;
         }
         if (GlobalData.IsRestart) GlobalData.IsRestart = false;
