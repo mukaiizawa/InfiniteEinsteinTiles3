@@ -290,7 +290,10 @@ public class TilingSceneManager : MonoBehaviour
             _undoHistories.Clear();
         }
         foreach (GameObject tile in tiles)
+        {
+            tile.transform.SetParent(null);
             Destroy(tile);
+        }
         UpdateTileCount();
     }
 
@@ -948,13 +951,13 @@ public class TilingSceneManager : MonoBehaviour
     public void OnRotateRight(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        RotateActiveTiles(-60);
+        RotateActiveTiles(-30);
     }
 
     public void OnRotateLeft(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-        RotateActiveTiles(60);
+        RotateActiveTiles(30);
     }
 
     public void OnCopy(InputAction.CallbackContext context)
