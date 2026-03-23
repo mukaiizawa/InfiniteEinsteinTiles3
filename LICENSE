@@ -14,7 +14,7 @@ limitations under the License.
 
 --
 
-./Assets/Audios/ (BGM)
+./Assets/Audios/
 
 Audio files generated from MIDI using FluidSynth and the GeneralUser GS SoundFont.
 Compositions are public domain.

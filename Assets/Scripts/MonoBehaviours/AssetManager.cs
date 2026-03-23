@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Collections;
-using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,64 +13,57 @@ public class AssetManager : MonoBehaviour
         public Vector2 Center;
     }
 
-    /*
-     * Texture
-     */
-    Sprite[] _puzzleFrames;
-    public Texture2D BrushTexture;
-    public Texture2D PipetteTexture;
-    public Texture TileTexture;
-    public Texture TileOutlineTexture;
-    public Material DefaultMaterial;
-    public Material HighlightMaterial;
-    public Material DissolveMaterial;
+    public AssetData Data;
 
     /*
-     * Audio
-     * unity default asset does not support array :(
+     * Passthrough properties — callers use these unchanged.
+     * To add/remove assets, edit AssetData instead.
      */
-    public AudioClip BGMTitle;
-    public AudioClip BGMMenu;
-    public AudioClip BGMTiling0;
-    public AudioClip BGMTiling1;
-    public AudioClip BGMTiling2;
-    public AudioClip BGMTiling3;
-    public AudioClip BGMTiling4;
-    public AudioClip BGMTiling5;
-    public AudioClip BGMTiling6;
-    public AudioClip BGMTiling7;
-    public AudioClip SEOK;
-    public AudioClip SECancel;
-    public AudioClip SEOnHoverUI;
-    public AudioClip SETileRotate;
-    public AudioClip SETilePut;
-    public AudioClip SETileCannotPut;
-    public AudioClip SETileGrab;
-    public AudioClip SETileRemove;
-    public AudioClip SETileDissolve;
-    public AudioClip SEPuzzleTimeOver;
-    public AudioClip SEPuzzleComplete;
+
+    // Textures
+    public Texture2D BrushTexture        => Data.BrushTexture;
+    public Texture2D PipetteTexture      => Data.PipetteTexture;
+    public Texture   TileTexture         => Data.TileTexture;
+    public Texture   TileOutlineTexture  => Data.TileOutlineTexture;
+
+    // Materials
+    public Material DefaultMaterial      => Data.DefaultMaterial;
+    public Material HighlightMaterial    => Data.HighlightMaterial;
+    public Material DissolveMaterial     => Data.DissolveMaterial;
+
+    // BGM
+    public AudioClip BGMTitle            => Data.BGMTitle;
+    public AudioClip BGMMenu             => Data.BGMMenu;
+
+    // SE
+    public AudioClip SEOK                => Data.SEOK;
+    public AudioClip SECancel            => Data.SECancel;
+    public AudioClip SEOnHoverUI         => Data.SEOnHoverUI;
+    public AudioClip SETileRotate        => Data.SETileRotate;
+    public AudioClip SETilePut           => Data.SETilePut;
+    public AudioClip SETileCannotPut     => Data.SETileCannotPut;
+    public AudioClip SETileGrab          => Data.SETileGrab;
+    public AudioClip SETileRemove        => Data.SETileRemove;
+    public AudioClip SETileDissolve      => Data.SETileDissolve;
+    public AudioClip SEPuzzleTimeOver    => Data.SEPuzzleTimeOver;
+    public AudioClip SEPuzzleComplete    => Data.SEPuzzleComplete;
+
+    /*
+     * Sprite cache
+     */
+    Sprite[] _puzzleFrames;
 
     public AudioClip[] GetPlaylist(LoadingManager.Scene scene)
     {
         switch (scene)
         {
             case LoadingManager.Scene.Title:
-                return new AudioClip[] { BGMTitle };
+                return new AudioClip[] { Data.BGMTitle };
             case LoadingManager.Scene.Menu:
             case LoadingManager.Scene.PuzzleMenu:
-                return new AudioClip[] { BGMMenu };
+                return new AudioClip[] { Data.BGMMenu };
             case LoadingManager.Scene.Tiling:
-                return new AudioClip[] {
-                    BGMTiling0,
-                    BGMTiling1,
-                    BGMTiling2,
-                    BGMTiling3,
-                    BGMTiling4,
-                    BGMTiling5,
-                    BGMTiling6,
-                    BGMTiling7,
-                };
+                return Data.BGMTiling;
             default:
                 return Array.Empty<AudioClip>();
         }
