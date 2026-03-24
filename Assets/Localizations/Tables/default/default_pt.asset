@@ -203,6 +203,10 @@ MonoBehaviour:
     m_Localized: Motor do jogo
     m_Metadata:
       m_Items: []
+  - m_Id: 11576977438056453
+    m_Localized: "Ferramentas de \xE1udio/v\xEDdeo"
+    m_Metadata:
+      m_Items: []
   - m_Id: 11576977438056452
     m_Localized: Agradecimento especial a
     m_Metadata:

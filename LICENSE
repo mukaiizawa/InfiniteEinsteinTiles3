@@ -16,19 +16,12 @@ limitations under the License.
 
 ./Assets/Audios/
 
-Audio files generated from MIDI using FluidSynth and the GeneralUser GS SoundFont.
-Compositions are public domain.
-
 MIDI source: The Mutopia Project (https://www.mutopiaproject.org/)
 License: Public Domain
 
 SoundFont: GeneralUser GS v1.471 by S. Christian Collins
 License: Free for commercial and non-commercial use
 https://github.com/mrbumpy409/GeneralUser-GS
-
-Synthesizer: FluidSynth v2.5.2
-License: LGPL-2.1
-https://github.com/FluidSynth/fluidsynth
 
 --
 

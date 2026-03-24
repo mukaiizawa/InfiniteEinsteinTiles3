@@ -42,13 +42,18 @@ public class MenuSceneManager : MonoBehaviour
         "Sayuri Mukai",
     };
     static string[] _creditMusicAndSound = new string[] {
-        "MaouDamashii: https://maou.audio/",
+        "The Mutopia Project: https://www.mutopiaproject.org/",
+        "GeneralUser GS by S. Christian Collins: https://github.com/mrbumpy409/GeneralUser-GS",
     };
     static string[] _creditIcon = new string[] {
         "UXWing: https://uxwing.com/",
     };
     static string[] _creditGameEngine = new string[] {
         "Unity: https://unity.com/",
+    };
+    static string[] _creditAudioVideoTools = new string[] {
+        "FluidSynth: https://github.com/FluidSynth/fluidsynth",
+        "FFmpeg: https://ffmpeg.org/",
     };
     static string[] _creditSpecialThanksTo = new string[] {
         "Kai Kimura",
@@ -272,6 +277,7 @@ public class MenuSceneManager : MonoBehaviour
         var musicAndSound = LocalizationSettings.StringDatabase.GetTableEntry("default", "music_and_sound").Entry.Value;
         var icon = LocalizationSettings.StringDatabase.GetTableEntry("default", "icon").Entry.Value;
         var gameEngine = LocalizationSettings.StringDatabase.GetTableEntry("default", "game_engine").Entry.Value;
+        var audioVideoTools = LocalizationSettings.StringDatabase.GetTableEntry("default", "audio_video_tools").Entry.Value;
         var specialThanksTo = LocalizationSettings.StringDatabase.GetTableEntry("default", "special_thanks_to").Entry.Value;
         using (StringWriter wr = new StringWriter())
         {
@@ -294,6 +300,9 @@ public class MenuSceneManager : MonoBehaviour
             wr.WriteLine();
             wr.WriteLine($"# {gameEngine}");
             wr.WriteLine(MarkdownList(_creditGameEngine));
+            wr.WriteLine();
+            wr.WriteLine($"# {audioVideoTools}");
+            wr.WriteLine(MarkdownList(_creditAudioVideoTools));
             wr.WriteLine();
             wr.WriteLine($"# {specialThanksTo}");
             wr.WriteLine(MarkdownList(_creditSpecialThanksTo));
