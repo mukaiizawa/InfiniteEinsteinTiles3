@@ -2,9 +2,9 @@ using System.Collections;
 
 using TMPro;
 using UnityEngine.Localization.Settings;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [DefaultExecutionOrder(100)]
 public class TitleSceneManager : MonoBehaviour
@@ -51,16 +51,22 @@ public class TitleSceneManager : MonoBehaviour
         if (Clicked) yield break;
         Clicked = true;
         _audioManager.PlaySE(_assetManager.SEOK);
-        var light = GameObject.Find("/GlobalLight").GetComponent<Light2D>();
+        var cam = Camera.main;
+        Vector2 vortexCenter = cam != null
+            ? (Vector2)cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f))
+            : Vector2.zero;
+        var placedTiles = GameObject.Find("/Board/PlacedTiles");
+        if (placedTiles != null)
+        {
+            foreach (Transform child in placedTiles.transform)
+                child.gameObject.AddComponent<VortexProjectile>().Initialize(vortexCenter, _fadeDulation);
+        }
         var canvasGroup = GameObject.Find("/Canvas").GetComponent<CanvasGroup>();
-        float startIntensity = light.intensity;
         float t = 0f;
         while (t < _fadeDulation)
         {
             t += Time.deltaTime;
-            var ratio = t / _fadeDulation;
-            if (light != null)
-                light.intensity = Mathf.Lerp(startIntensity, 0f, ratio);
+            var ratio = Mathf.Clamp01(t / _fadeDulation);
             if (canvasGroup != null)
                 canvasGroup.alpha = Mathf.Lerp(1f, 0f, ratio);
             yield return null;
