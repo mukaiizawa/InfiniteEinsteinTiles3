@@ -53,7 +53,7 @@ public class TitleSceneManager : MonoBehaviour
         StartCoroutine(PlayTileEntrance(canvasGroup));
     }
 
-    float _entranceDuration = 1.5f;
+    float _entranceDuration = 2.0f;
     float _entranceMaxDelay = 0.3f;
 
     IEnumerator PlayTileEntrance(CanvasGroup canvasGroup)
@@ -94,13 +94,14 @@ public class TitleSceneManager : MonoBehaviour
         if (Clicked) yield break;
         Clicked = true;
         _audioManager.PlaySE(_assetManager.SEOK);
-        var canvasGroup = GameObject.Find("/Canvas").GetComponent<CanvasGroup>();
+        var mask = _loadingManager.Mask;
+        mask.alpha = 0f;
+        mask.gameObject.SetActive(true);
         float t = 0f;
         while (t < _fadeDulation)
         {
             t += Time.deltaTime;
-            if (canvasGroup != null)
-                canvasGroup.alpha = Mathf.Lerp(1f, 0f, Mathf.Clamp01(t / _fadeDulation));
+            mask.alpha = Mathf.Clamp01(t / _fadeDulation);
             yield return null;
         }
         yield return _loadingManager.LoadAsync(LoadingManager.Scene.Menu);

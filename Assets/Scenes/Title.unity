@@ -20111,6 +20111,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: FadeOutPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 2001685838267611182, guid: 5a1b754557d58c64bb4a3b361df1275f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061792299854832631, guid: 5a1b754557d58c64bb4a3b361df1275f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068221371266791401, guid: 5a1b754557d58c64bb4a3b361df1275f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
