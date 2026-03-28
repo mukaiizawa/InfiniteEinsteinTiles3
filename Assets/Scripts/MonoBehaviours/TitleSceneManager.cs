@@ -43,6 +43,49 @@ public class TitleSceneManager : MonoBehaviour
 #if DEMO
         DemoLabel.SetActive(true);
 #endif
+        var canvasGroup = GameObject.Find("/Canvas").GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+        StartCoroutine(PlayTileEntrance(canvasGroup));
+    }
+
+    float _entranceDuration = 1.5f;
+    float _entranceMaxDelay = 0.3f;
+
+    IEnumerator PlayTileEntrance(CanvasGroup canvasGroup)
+    {
+        var cam = Camera.main;
+        Vector2 center = cam != null
+            ? (Vector2)cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f))
+            : Vector2.zero;
+        var placedTiles = GameObject.Find("/Board/PlacedTiles");
+        if (placedTiles != null)
+        {
+            foreach (Transform child in placedTiles.transform)
+            {
+                float delay = Random.Range(0f, _entranceMaxDelay);
+                child.gameObject.AddComponent<TileEntrance>().Initialize(center, _entranceDuration, delay);
+            }
+        }
+        yield return new WaitForSeconds(_entranceDuration + _entranceMaxDelay);
+        float t = 0f;
+        float fadeDuration = 0.5f;
+        if (canvasGroup != null)
+        {
+            while (t < fadeDuration)
+            {
+                t += Time.deltaTime;
+                canvasGroup.alpha = Mathf.Clamp01(t / fadeDuration);
+                yield return null;
+            }
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
     }
 
     float _fadeDulation = 2f;
@@ -51,24 +94,13 @@ public class TitleSceneManager : MonoBehaviour
         if (Clicked) yield break;
         Clicked = true;
         _audioManager.PlaySE(_assetManager.SEOK);
-        var cam = Camera.main;
-        Vector2 vortexCenter = cam != null
-            ? (Vector2)cam.ScreenToWorldPoint(new Vector3(Screen.width / 2f, Screen.height / 2f))
-            : Vector2.zero;
-        var placedTiles = GameObject.Find("/Board/PlacedTiles");
-        if (placedTiles != null)
-        {
-            foreach (Transform child in placedTiles.transform)
-                child.gameObject.AddComponent<VortexProjectile>().Initialize(vortexCenter, _fadeDulation);
-        }
         var canvasGroup = GameObject.Find("/Canvas").GetComponent<CanvasGroup>();
         float t = 0f;
         while (t < _fadeDulation)
         {
             t += Time.deltaTime;
-            var ratio = Mathf.Clamp01(t / _fadeDulation);
             if (canvasGroup != null)
-                canvasGroup.alpha = Mathf.Lerp(1f, 0f, ratio);
+                canvasGroup.alpha = Mathf.Lerp(1f, 0f, Mathf.Clamp01(t / _fadeDulation));
             yield return null;
         }
         yield return _loadingManager.LoadAsync(LoadingManager.Scene.Menu);
