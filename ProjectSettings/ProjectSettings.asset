@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: Mukai Systems
   productName: Infinite Einstein Tiles3
-  defaultCursor: {fileID: 2800000, guid: 181a6c659b155314cbb77a5e73d58ed4, type: 3}
+  defaultCursor: {fileID: 2800000, guid: d944bc863d3fb8f408b2b5c56cb25c0e, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 0
@@ -296,7 +296,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 458d88a6318508045a081d84ae4c5a0a, type: 3}
+      m_Icon: {fileID: 2800000, guid: 92298aa664a429c4e944d5f5924a498a, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
