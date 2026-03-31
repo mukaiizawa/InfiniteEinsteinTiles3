@@ -47,6 +47,8 @@ public class AssetManager : MonoBehaviour
     public AudioClip SETileDissolve      => Data.SETileDissolve;
     public AudioClip SEPuzzleTimeOver    => Data.SEPuzzleTimeOver;
     public AudioClip SEPuzzleComplete    => Data.SEPuzzleComplete;
+    public AudioClip SETitleEntrance     => Data.SETitleEntrance;
+    public AudioClip SETitleShimmer      => Data.SETitleShimmer;
 
     /*
      * Sprite cache

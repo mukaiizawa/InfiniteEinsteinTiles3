@@ -32,5 +32,7 @@ public class AssetData : ScriptableObject
     public AudioClip SETileDissolve;
     public AudioClip SEPuzzleTimeOver;
     public AudioClip SEPuzzleComplete;
+    public AudioClip SETitleEntrance;
+    public AudioClip SETitleShimmer;
 
 }

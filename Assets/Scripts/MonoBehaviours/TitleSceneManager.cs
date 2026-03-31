@@ -16,10 +16,15 @@ public class TitleSceneManager : MonoBehaviour
     public TextMeshProUGUI VersionText;
     public GameObject DemoLabel;
 
+    public Image ShimmerImage;
+    public float ShimmerDuration = 1.4f;
+
     AudioManager _audioManager;
     AssetManager _assetManager;
     LoadingManager _loadingManager;
     PersistentManager _persistentManager;
+
+    Material _shimmerMaterial;
 
     void Awake()
     {
@@ -28,6 +33,23 @@ public class TitleSceneManager : MonoBehaviour
         _assetManager = this.gameObject.GetComponent<AssetManager>();
         _loadingManager = this.gameObject.GetComponent<LoadingManager>();
         _persistentManager = this.gameObject.GetComponent<PersistentManager>();
+        if (ShimmerImage != null)
+        {
+            ShimmerImage.gameObject.SetActive(true);
+            var shader = Shader.Find("TitleShimmer");
+            if (shader != null)
+            {
+                _shimmerMaterial = new Material(shader);
+                ShimmerImage.material = _shimmerMaterial;
+            }
+            ShimmerImage.enabled = false;
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (_shimmerMaterial != null)
+            Destroy(_shimmerMaterial);
     }
 
     void Start()
@@ -71,7 +93,9 @@ public class TitleSceneManager : MonoBehaviour
                 child.gameObject.AddComponent<TileEntrance>().Initialize(center, _entranceDuration, delay);
             }
         }
+        _audioManager.PlaySE(_assetManager.SETitleEntrance);
         yield return new WaitForSeconds(_entranceDuration + _entranceMaxDelay);
+        if (_shimmerMaterial != null) StartCoroutine(PlayShimmer());
         float t = 0f;
         float fadeDuration = 0.5f;
         if (canvasGroup != null)
@@ -86,6 +110,25 @@ public class TitleSceneManager : MonoBehaviour
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
         }
+    }
+
+    IEnumerator PlayShimmer()
+    {
+        _audioManager.PlaySE(_assetManager.SETitleShimmer);
+        ShimmerImage.enabled = true;
+        float t = 0f;
+        while (t < ShimmerDuration)
+        {
+            t += Time.deltaTime;
+            float ratio = Mathf.Clamp01(t / ShimmerDuration);
+            float eased = ratio < 0.5f
+                ? 4f * ratio * ratio * ratio
+                : 1f - Mathf.Pow(-2f * ratio + 2f, 3f) / 2f;
+            _shimmerMaterial.SetFloat("_Progress", eased);
+            yield return null;
+        }
+        _shimmerMaterial.SetFloat("_Progress", 1f);
+        ShimmerImage.enabled = false;
     }
 
     float _fadeDulation = 2f;
