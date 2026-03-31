@@ -47658,13 +47658,13 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3001000002}
   - {fileID: 680842962}
   - {fileID: 2061374119}
   - {fileID: 2056189059}
   - {fileID: 1904075556}
   - {fileID: 1151687108}
   - {fileID: 455712634}
-  - {fileID: 3001000002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -62949,9 +62949,9 @@ GameObject:
   - component: {fileID: 1511110713}
   - component: {fileID: 1511110714}
   - component: {fileID: 1511110715}
-  - component: {fileID: 1511110716}
   - component: {fileID: 1511110717}
   - component: {fileID: 1511110718}
+  - component: {fileID: 1511110716}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
