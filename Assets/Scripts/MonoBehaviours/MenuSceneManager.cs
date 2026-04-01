@@ -31,7 +31,9 @@ public class MenuSceneManager : MonoBehaviour
 
     /* Manual */
     static string _manualPath = Path.Combine(Application.streamingAssetsPath, "Manual", "An_aperiodic_monotile.pdf");
+    static string _manual2Path = Path.Combine(Application.streamingAssetsPath, "Manual", "An_chiral_aperiodic_monotile.pdf");
     public Button ManualButton;
+    public Button Manual2Button;
 
     /* Credit */
     public GameObject CreditPanel;
@@ -191,7 +193,8 @@ public class MenuSceneManager : MonoBehaviour
             }
         }
         LanguageOpenButton.onClick.AddListener(() => ChangeState(State.Language));
-        ManualButton.onClick.AddListener(OnManualButtonClick);
+        ManualButton.onClick.AddListener(() => OnManualButtonClick(_manualPath));
+        Manual2Button.onClick.AddListener(() => OnManualButtonClick(_manual2Path));
         CreditOpenButton.onClick.AddListener(OnCreditOpenButtonClick);
         CreditCloseButton.onClick.AddListener(() => ChangeState(State.None));
         MenuOpenButton.onClick.AddListener(() => ChangeState(State.Menu));
@@ -246,7 +249,7 @@ public class MenuSceneManager : MonoBehaviour
         return vals.Select(x => $"- {x}").Aggregate((x, y) => x + "\n" + y);
     }
 
-    void OnManualButtonClick()
+    void OnManualButtonClick(string fn)
     {
         try {
 #if UNITY_STANDALONE_WIN
@@ -254,7 +257,7 @@ public class MenuSceneManager : MonoBehaviour
 #else
             var proto = "file://";
 #endif
-            Application.OpenURL(proto + _manualPath);
+            Application.OpenURL(proto + fn);
         }
         catch (Exception e)
         {
