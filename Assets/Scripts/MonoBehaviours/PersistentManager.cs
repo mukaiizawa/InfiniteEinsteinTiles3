@@ -104,7 +104,7 @@ public class PersistentManager : MonoBehaviour
 
     public float GetSEVolume()
     {
-        return PlayerPrefs.GetFloat(_prefKeySE, 0.5f);
+        return PlayerPrefs.GetFloat(_prefKeySE, 0.3f);
     }
 
     public void SetSEVolume(float val)
