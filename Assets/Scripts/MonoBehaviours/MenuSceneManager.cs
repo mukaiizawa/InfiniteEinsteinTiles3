@@ -20,14 +20,12 @@ public class MenuSceneManager : MonoBehaviour
     {
         None,
         Solutions,
+        PuzzleSlotSelection,
         Credit,
         Language,
         Menu,
         Setting,
     }
-
-    /* Puzzle Mode */
-    public Button[] SlotButtons;
 
     /* Manual */
     static string _manualPath = Path.Combine(Application.streamingAssetsPath, "Manual", "An_aperiodic_monotile.pdf");
@@ -44,6 +42,7 @@ public class MenuSceneManager : MonoBehaviour
         "Sayuri Mukai",
     };
     static string[] _creditMusicAndSound = new string[] {
+        "MaouDamashii: https://maou.audio/",
         "The Mutopia Project: https://www.mutopiaproject.org/",
         "GeneralUser GS by S. Christian Collins: https://github.com/mrbumpy409/GeneralUser-GS",
     };
@@ -96,9 +95,17 @@ public class MenuSceneManager : MonoBehaviour
     public Button SettingOpenButton;
     public Button SettingCloseButton;
 
+    /* Creative mode */
     public GameObject SolutionsPanel;
     public Button SolutionsOpenButton;
     public Button SolutionsCloseButton;
+
+    /* Puzzle mode */
+    public Button[] SlotButtons;
+    public GameObject PuzzleSlotSelectionPanel;
+    public Button PuzzleSlotSelectionPanelOpenButton;
+    public Button PuzzleSlotSelectionPanelCloseButton;
+
     public Button QuitButton;
     public GameObject DemoNoticePanel;
 
@@ -118,12 +125,16 @@ public class MenuSceneManager : MonoBehaviour
         {
             case State.None:
                 SolutionsPanel.SetActive(false);
+                PuzzleSlotSelectionPanel.SetActive(false);
                 MenuPanel.SetActive(false);
                 LanguagePanel.SetActive(false);
                 CreditPanel.SetActive(false);
                 break;
             case State.Solutions:
                 SolutionsPanel.SetActive(true);
+                break;
+            case State.PuzzleSlotSelection:
+                PuzzleSlotSelectionPanel.SetActive(true);
                 break;
             case State.Credit:
                 CreditPanel.SetActive(true);
@@ -169,15 +180,16 @@ public class MenuSceneManager : MonoBehaviour
         _steamManager = GameObject.Find("/SteamManager").GetComponent<SteamManager>();
         SolutionsOpenButton.onClick.AddListener(() => ChangeState(State.Solutions));
         SolutionsCloseButton.onClick.AddListener(() => ChangeState(State.None));
+        PuzzleSlotSelectionPanelOpenButton.onClick.AddListener(() => ChangeState(State.PuzzleSlotSelection));
+        PuzzleSlotSelectionPanelCloseButton.onClick.AddListener(() => ChangeState(State.None));
         for (int i = 0; i < SlotButtons.Length; i++)
         {
             int slot = i + 1;
             var slotButton = SlotButtons[i];
             slotButton.onClick.AddListener(() => OnClickSlot(slot));
-            var tooltipComonent = slotButton.GetComponent<UITooltip>();
-            foreach (var tmp in tooltipComonent.Tooltip.GetComponentsInChildren<TextMeshProUGUI>())
+            var progress = _persistentManager.LoadProgress(slot);
+            foreach (var tmp in slotButton.GetComponentsInChildren<TextMeshProUGUI>())
             {
-                var progress = _persistentManager.LoadProgress(slot);
                 if (tmp.gameObject.name == "Progress")
                     tmp.text = $"{progress.CurrentLevel * 100 / GlobalData.TotalLevel}%";
             }
@@ -231,6 +243,7 @@ public class MenuSceneManager : MonoBehaviour
                 _solutionManager.OnCancel();
                 if (!SolutionsPanel.activeSelf) ChangeState(State.None);
                 break;
+            case State.PuzzleSlotSelection:
             case State.Menu:
             case State.Credit:
             case State.Language:
