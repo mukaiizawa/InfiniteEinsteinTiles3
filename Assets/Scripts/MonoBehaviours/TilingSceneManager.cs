@@ -141,7 +141,7 @@ public class TilingSceneManager : MonoBehaviour
      */
     bool _isKeyModify1 = false;
     bool _isKeyModify2 = false;
-    bool _isDrugging = false;
+    bool _isDragging = false;
     int _mouseWheelSensitivity;
     int _mouseWheelMaxSensitivity;
     int _mouseWheelMinSensitivity;
@@ -163,6 +163,8 @@ public class TilingSceneManager : MonoBehaviour
      */
     Board _answerBoard;
     Edge[] _answerOuterEdges;
+    Dictionary<(int, int), List<TileMemory>> _spatialGrid = new Dictionary<(int, int), List<TileMemory>>();
+    const float GridCellSize = 4f;
     ConcurrentStack<Tuple<Action, TileMemory[], Color>> _histories = new ConcurrentStack<Tuple<Action, TileMemory[], Color>>();
     ConcurrentStack<Tuple<Action, TileMemory[], Color>> _undoHistories = new ConcurrentStack<Tuple<Action, TileMemory[], Color>>();
 
@@ -192,6 +194,7 @@ public class TilingSceneManager : MonoBehaviour
 
     void SpawnTiles(TileMemory[] memories)
     {
+        foreach (var m in memories) GridAdd(m);
         foreach (GameObject tile in MakeTiles(memories))
         {
             tile.GetComponent<SpriteRenderer>().sortingOrder = 2;
@@ -227,10 +230,9 @@ public class TilingSceneManager : MonoBehaviour
         _audioManager.PlaySE(_assetManager.SETilePut);
         Vector2 dr = Vector2.zero;
         var memories = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        var existingMems = PlacedTiles.Children().Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        if (existingMems.Length > 0 || _answerOuterEdges != null)
+        if (_spatialGrid.Count > 0 || _answerOuterEdges != null)
         {
-            if (TryVertexSnap(memories, existingMems, out dr))
+            if (TryVertexSnap(memories, out dr))
             {
                 for (int i = 0; i < memories.Length; i++)
                 {
@@ -242,7 +244,7 @@ public class TilingSceneManager : MonoBehaviour
             var acceptedMems = new List<TileMemory>();
             for (int i = 0; i < memories.Length; i++)
             {
-                if (!HasCollision(memories[i], existingMems))
+                if (!HasCollision(memories[i]))
                 {
                     acceptedMems.Add(memories[i]);
                 }
@@ -267,21 +269,24 @@ public class TilingSceneManager : MonoBehaviour
     bool IsPuzzleSolved()
     {
         if (PlacedTiles.transform.childCount != _answerBoard.PlacedTileCount()) return false;
-        var placedEdges = PlacedTiles.Children()
-            .Select(t => t.GetComponent<Tile>().ExportMemory())
+        var placedEdges = _spatialGrid.Values.SelectMany(list => list)
             .SelectMany(m => m.Edges())
             .ToList();
         return _answerOuterEdges.All(outer => placedEdges.Any(e => e.StrictlyEqual(outer)));
     }
 
+    void PushRemovalHistory(GameObject[] tiles)
+    {
+        var mems = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
+        _histories.Push(Tuple.Create(Action.Remove, mems, Color.white));
+        _undoHistories.Clear();
+        GridRemove(mems.Select(m => m.Position).ToHashSet());
+    }
+
     void RemoveTiles(GameObject[] tiles, Record record)
     {
         _audioManager.PlaySE(_assetManager.SETileRemove);
-        if (record == Record.Enabled)
-        {
-            _histories.Push(Tuple.Create(Action.Remove, tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray(), Color.white));
-            _undoHistories.Clear();
-        }
+        if (record == Record.Enabled) PushRemovalHistory(tiles);
         foreach (GameObject tile in tiles)
         {
             tile.transform.SetParent(null);
@@ -293,11 +298,7 @@ public class TilingSceneManager : MonoBehaviour
     void GrabTiles(GameObject[] tiles, Record record)
     {
         _audioManager.PlaySE(_assetManager.SETileGrab);
-        if (record == Record.Enabled)
-        {
-            _histories.Push(Tuple.Create(Action.Remove, tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray(), Color.white));
-            _undoHistories.Clear();
-        }
+        if (record == Record.Enabled) PushRemovalHistory(tiles);
         var minX = tiles.Min(o => o.transform.position.x);
         var maxX = tiles.Max(o => o.transform.position.x);
         var minY = tiles.Min(o => o.transform.position.y);
@@ -409,23 +410,61 @@ public class TilingSceneManager : MonoBehaviour
         else
         {
             var targetPositions = memories.Select(x => x.Position).ToHashSet();
+            GridRemove(targetPositions);
             foreach (GameObject tile in PlacedTiles.Children().Where(x => targetPositions.Contains(x.GetComponent<Tile>().ExportMemory().Position)))
+            {
+                tile.transform.SetParent(null);
                 Destroy(tile);
+            }
         }
         UpdateTileCountAndCheckSolved();
     }
 
+    // Spatial grid helpers
+    (int, int) GridCell(Vector2 pos) =>
+        ((int)Mathf.Floor(pos.x / GridCellSize), (int)Mathf.Floor(pos.y / GridCellSize));
+
+    void GridAdd(TileMemory m)
+    {
+        var cell = GridCell(m.Position);
+        if (!_spatialGrid.TryGetValue(cell, out var list))
+            _spatialGrid[cell] = list = new List<TileMemory>();
+        list.Add(m);
+    }
+
+    void GridRemove(HashSet<Vector2> positions)
+    {
+        foreach (var pos in positions)
+        {
+            var cell = GridCell(pos);
+            if (_spatialGrid.TryGetValue(cell, out var list))
+            {
+                list.RemoveAll(m => m.Position == pos);
+                if (list.Count == 0) _spatialGrid.Remove(cell);
+            }
+        }
+    }
+
+    IEnumerable<TileMemory> GridNearby(Vector2 pos)
+    {
+        var (cx, cy) = GridCell(pos);
+        for (int dx = -1; dx <= 1; dx++)
+            for (int dy = -1; dy <= 1; dy++)
+                if (_spatialGrid.TryGetValue((cx + dx, cy + dy), out var list))
+                    foreach (var m in list) yield return m;
+    }
+
     // Vertex-based snap: find the closest (new vertex, existing vertex) pair.
     // If the distance is within GlobalData.Tolerance, return the snap offset.
-    bool TryVertexSnap(TileMemory[] newMems, TileMemory[] existingMems, out Vector2 dr)
+    bool TryVertexSnap(TileMemory[] newMems, out Vector2 dr)
     {
         dr = Vector2.zero;
         float bestSqr = GlobalData.Tolerance; // threshold (squared distance comparison via NearlyEqual convention)
-        var snapVertices = existingMems.SelectMany(m => m.Vertices());
-        if (_answerOuterEdges != null)
-            snapVertices = snapVertices.Concat(_answerOuterEdges.SelectMany(e => new[] { e.P, e.Q }));
         foreach (var mem in newMems)
         {
+            var snapVertices = GridNearby(mem.Position).SelectMany(m => m.Vertices()).ToArray();
+            if (_answerOuterEdges != null)
+                snapVertices = snapVertices.Concat(_answerOuterEdges.SelectMany(e => new[] { e.P, e.Q })).ToArray();
             foreach (var nv in mem.Vertices())
             {
                 foreach (var ev in snapVertices)
@@ -449,11 +488,11 @@ public class TilingSceneManager : MonoBehaviour
     // Tile pairs farther apart than this squared distance cannot collide (~2x circumradius)
     static readonly float CollisionDistSq = 12f;
 
-    bool HasCollision(TileMemory n, IReadOnlyList<TileMemory> existingMems)
+    bool HasCollision(TileMemory n)
     {
-        foreach (var e in existingMems)
+        foreach (var e in GridNearby(n.Position))
         {
-            // Early skip by position distance
+            // Early skip by position distance (catches grid cell boundary fringe cases)
             if ((n.Position - e.Position).sqrMagnitude >= CollisionDistSq)
                 continue;
             // 1. Position coincidence (duplicate or overlapping with different rotation)
@@ -868,7 +907,7 @@ public class TilingSceneManager : MonoBehaviour
             case State.Paint:
             case State.Pipette:
                 // camera
-                if (_isDrugging && !_isCursorInUI)
+                if (_isDragging && !_isCursorInUI)
                 {
                     if (Time.time - _clickStartTime > 0.1f || Vector2.Distance(_clickedScreenPos, _mouseScreenPos) > _dragTimeThreshold)
                         _camera.transform.Translate(_clickedPos - _mousePos);
@@ -1070,8 +1109,8 @@ public class TilingSceneManager : MonoBehaviour
                     default:
                         break;
                 }
-                // start drug.
-                _isDrugging = true;
+                // start drag.
+                _isDragging = true;
                 _clickStartTime = Time.time;
                 _clickedPos = _mousePos;
                 _clickedScreenPos = _mouseScreenPos;
@@ -1079,14 +1118,14 @@ public class TilingSceneManager : MonoBehaviour
             }
             if (context.canceled)
             {
-                _isDrugging = false;
-                bool isDrug = (Time.time - _clickStartTime > _dragTimeThreshold) || (Vector2.Distance(_clickedScreenPos, _mouseScreenPos) > _dragDistanceThreshold);
+                _isDragging = false;
+                bool isDrag = (Time.time - _clickStartTime > _dragTimeThreshold) || (Vector2.Distance(_clickedScreenPos, _mouseScreenPos) > _dragDistanceThreshold);
                 switch (_state)
                 {
                     case State.Selecting:
                         break;
                     default:
-                        if (isDrug) return;
+                        if (isDrag) return;
                         break;
                 }
                 switch (_state)

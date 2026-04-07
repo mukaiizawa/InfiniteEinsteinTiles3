@@ -31,6 +31,7 @@ public class TileMemory
     public Color Color;
 
     Edge[] _edges;
+    Vector2[] _vertices;
 
     public TileMemory()
     {
@@ -56,16 +57,22 @@ public class TileMemory
 
     public Edge[] Edges()
     {
-        Vector2[] vertices = VerticesTable[this.Rotation].Select(p => p.ToVector2() + this.Position).ToArray();
-        Edge[] edges = new Edge[EdgeCount];
+        if (_edges != null) return _edges;
+        var verts = Vertices();
+        _edges = new Edge[EdgeCount];
         for (int i = 0; i < EdgeCount; i++)
-            edges[i] = new Edge(vertices[i], vertices[(i + 1) % EdgeCount]);
-        return edges;
+            _edges[i] = new Edge(verts[i], verts[(i + 1) % EdgeCount]);
+        return _edges;
     }
 
     public Vector2[] Vertices()
     {
-        return VerticesTable[this.Rotation].Select(p => p.ToVector2() + this.Position).ToArray();
+        if (_vertices != null) return _vertices;
+        var table = VerticesTable[this.Rotation];
+        _vertices = new Vector2[table.Length];
+        for (int i = 0; i < table.Length; i++)
+            _vertices[i] = table[i].ToVector2() + this.Position;
+        return _vertices;
     }
 
     // Point-in-polygon test via ray casting.
