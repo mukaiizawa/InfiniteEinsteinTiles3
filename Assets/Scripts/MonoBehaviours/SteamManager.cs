@@ -13,7 +13,7 @@ public class SteamManager : MonoBehaviour
     public static uint _productAppId = 4553450;
 
     bool _connected = false;
-    int _achievementCount = GlobalData.TotalLevel + 1;    // Each level and all cleared. 1 to 29.
+    int _achievementCount = GlobalData.TotalLevel + 1;    // Each level and all cleared.
 
     void Awake()
     {
