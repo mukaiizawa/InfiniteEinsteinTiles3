@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using System;
 
 using TMPro;
@@ -54,6 +53,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     public GameObject PuzzleLayout;
     public Button LevelUpButton;
     public Button LevelDownButton;
+    public Vector2 TileAreaOffset;   // shifts tile area on screen (e.g. x>0 = right)
 
     Camera _camera;
     Vector2 _mousePos;
@@ -69,12 +69,15 @@ public class PuzzleMenuSceneManager : MonoBehaviour
 
     // _levels[0] = Level1, ..., _levels[4] = Level5
     GameObject[] _levels;
+    SpriteRenderer[][] _levelRenderers;   // cached at Start to avoid per-frame GetComponentsInChildren
     int _displayLevel;   // 1–5
     int _currentLevel;   // solved puzzle count (from Progress)
 
     GameObject _activeCluster;
     Vector3 _activeClusterOriginalPos;
     readonly Vector3 _hoverScale = new Vector3(1.1f, 1.1f, 1f);
+    bool _isTransitioning;
+    const float TransitionDuration = 0.8f;
 
     /*
      * Puzzle 1           → Level1 / Cluster0
@@ -149,14 +152,104 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         _state = to;
     }
 
+    void UpdateLevelButtons()
+    {
+        LevelUpButton.interactable = IsDisplayLevelAccessible(_displayLevel + 1);
+        LevelDownButton.interactable = _displayLevel > 1;
+    }
+
+    // Immediate switch with no animation — used on startup.
     void ShowDisplayLevel(int level)
     {
         for (int i = 0; i < _levels.Length; i++)
             _levels[i].SetActive(i == level - 1);
         _displayLevel = level;
-        LevelUpButton.interactable = IsDisplayLevelAccessible(_displayLevel + 1);
-        LevelDownButton.interactable = _displayLevel > 1;
+        UpdateLevelButtons();
+        FitCameraToLevel(level);
         ClearHover();
+    }
+
+    static Bounds EncapsulateBounds(SpriteRenderer[] renderers)
+    {
+        if (renderers.Length == 0) return new Bounds();
+        var b = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++) b.Encapsulate(renderers[i].bounds);
+        return b;
+    }
+
+    Bounds GetLevelBounds(int level) => EncapsulateBounds(_levelRenderers[level - 1]);
+
+    float CameraSizeForBounds(Bounds b)
+    {
+        float vertical = b.extents.y;
+        float horizontal = b.extents.x / _camera.aspect;
+        return Mathf.Max(vertical, horizontal) * 1.15f;  // 15% padding
+    }
+
+    // Returns world-space camera offset scaled to the given orthographic size.
+    // TileAreaOffset is in normalized units: (1, 0) shifts tiles right by one half-screen-width.
+    Vector3 ScaledOffset(float orthoSize)
+        => new Vector3(
+            -TileAreaOffset.x * orthoSize * _camera.aspect,
+            -TileAreaOffset.y * orthoSize,
+            0f);
+
+    void FitCameraToLevel(int level)
+    {
+        var b = GetLevelBounds(level);
+        _camera.orthographicSize = CameraSizeForBounds(b);
+        var pos = _camera.transform.position;
+        _camera.transform.position = new Vector3(b.center.x, b.center.y, pos.z) + ScaledOffset(_camera.orthographicSize);
+    }
+
+    void SetLevelAlpha(int level, float alpha)
+    {
+        foreach (var r in _levelRenderers[level - 1])
+        {
+            var c = r.color;
+            c.a = alpha;
+            r.color = c;
+        }
+    }
+
+    IEnumerator TransitionLevelAsync(int from, int to)
+    {
+        _isTransitioning = true;
+        ClearHover();
+
+        // Activate destination level at alpha 0
+        _levels[to - 1].SetActive(true);
+        SetLevelAlpha(to, 0f);
+
+        var fromBounds = GetLevelBounds(from);
+        var toBounds   = GetLevelBounds(to);
+        float fromSize = CameraSizeForBounds(fromBounds);
+        float toSize   = CameraSizeForBounds(toBounds);
+        float camZ = _camera.transform.position.z;
+        var fromBase = new Vector3(fromBounds.center.x, fromBounds.center.y, camZ);
+        var toBase   = new Vector3(toBounds.center.x,   toBounds.center.y,   camZ);
+
+        float elapsed = 0f;
+        while (elapsed < TransitionDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / TransitionDuration);
+            SetLevelAlpha(from, 1f - t);
+            SetLevelAlpha(to, t);
+            float size = Mathf.Lerp(fromSize, toSize, t);
+            _camera.orthographicSize = size;
+            _camera.transform.position = Vector3.Lerp(fromBase, toBase, t) + ScaledOffset(size);
+            yield return null;
+        }
+
+        // Clean up
+        _levels[from - 1].SetActive(false);
+        SetLevelAlpha(from, 1f);
+        SetLevelAlpha(to, 1f);
+
+        _displayLevel = to;
+        UpdateLevelButtons();
+        _isTransitioning = false;
     }
 
     void Awake()
@@ -191,19 +284,25 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         QuitButton.onClick.AddListener(OnPowerOff);
         LevelUpButton.onClick.AddListener(() =>
         {
+            if (_isTransitioning) return;
             _audioManager.PlaySE(_assetManager.SEOK);
-            ShowDisplayLevel(_displayLevel + 1);
+            StartCoroutine(TransitionLevelAsync(_displayLevel, _displayLevel + 1));
         });
         LevelDownButton.onClick.AddListener(() =>
         {
+            if (_isTransitioning) return;
             _audioManager.PlaySE(_assetManager.SEOK);
-            ShowDisplayLevel(_displayLevel - 1);
+            StartCoroutine(TransitionLevelAsync(_displayLevel, _displayLevel - 1));
         });
 
-        // Collect level GameObjects
+        // Collect level GameObjects and cache their renderers
         _levels = new GameObject[5];
+        _levelRenderers = new SpriteRenderer[5][];
         for (int i = 0; i < 5; i++)
+        {
             _levels[i] = PuzzleLayout.transform.Find("Level" + (i + 1)).gameObject;
+            _levelRenderers[i] = _levels[i].GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
+        }
 
         // Apply unlock/dissolve/hide state to each cluster
         for (int lvl = 1; lvl <= 5; lvl++)
@@ -257,26 +356,17 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         }
     }
 
-    // Returns the world-space center of all SpriteRenderers in the cluster.
-    static Vector3 ClusterCenter(GameObject cluster)
-    {
-        var renderers = cluster.GetComponentsInChildren<SpriteRenderer>();
-        if (renderers.Length == 0) return cluster.transform.position;
-        var bounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++) bounds.Encapsulate(renderers[i].bounds);
-        return bounds.center;
-    }
-
     const int HoverSortingOrderBoost = 10;
 
     void ApplyHoverScale(GameObject cluster)
     {
+        var renderers = cluster.GetComponentsInChildren<SpriteRenderer>();
+        var center = renderers.Length > 0 ? EncapsulateBounds(renderers).center : cluster.transform.position;
         _activeClusterOriginalPos = cluster.transform.position;
-        var center = ClusterCenter(cluster);
         float s = _hoverScale.x;
         cluster.transform.localScale = _hoverScale;
         cluster.transform.position = _activeClusterOriginalPos + (center - _activeClusterOriginalPos) * (1f - s);
-        foreach (var r in cluster.GetComponentsInChildren<SpriteRenderer>())
+        foreach (var r in renderers)
             r.sortingOrder += HoverSortingOrderBoost;
     }
 
@@ -296,6 +386,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_levels == null || _isTransitioning) return;
         _mousePos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         if (_state != State.None) return;
 
@@ -311,13 +402,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         if (cluster == _activeCluster) return;
 
         // Switched to a new cluster
-        if (_activeCluster != null)
-        {
-            _activeCluster.transform.localScale = Vector3.one;
-            _activeCluster.transform.position = _activeClusterOriginalPos;
-            foreach (var r in _activeCluster.GetComponentsInChildren<SpriteRenderer>())
-                r.sortingOrder -= HoverSortingOrderBoost;
-        }
+        ClearHover();
 
         _activeCluster = cluster;
         ApplyHoverScale(cluster);
