@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System;
@@ -6,7 +5,6 @@ using System;
 using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization.Settings;
-using UnityEngine.Localization.Tables;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -30,8 +28,8 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     public TextMeshProUGUI TextProgress;
     public TextMeshProUGUI TextCongratulations;
     public Image Preview;
-    string _l10nLevel;
     public TextMeshProUGUI TextLevel;
+    string _l10nLevel;
 
     /*
      * Menu
@@ -45,19 +43,22 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     public Button SettingCloseButton;
 
     public Button ReturnToMenuButton;
-
     public Button QuitButton;
 
     public GameObject SolutionsPanel;
     public Button SolutionsCloseButton;
 
+    /*
+     * Puzzle layout
+     */
+    public GameObject PuzzleLayout;
+    public Button LevelUpButton;
+    public Button LevelDownButton;
+
     Camera _camera;
     Vector2 _mousePos;
-
-    /*
-     * _state
-     */
     State _state;
+
     AssetManager _assetManager;
     AudioManager _audioManager;
     LoadingManager _loadingManager;
@@ -66,9 +67,54 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     SteamManager _steamManager;
     SolutionManager _solutionManager;
 
-    GameObject[] _parentsH;
-    GameObject _activePuzzle;
-    Vector2 _expansionScale = new Vector2(1.2f, 1.2f);
+    // _levels[0] = Level1, ..., _levels[4] = Level5
+    GameObject[] _levels;
+    int _displayLevel;   // 1–5
+    int _currentLevel;   // solved puzzle count (from Progress)
+
+    GameObject _activeCluster;
+    Vector3 _activeClusterOriginalPos;
+    readonly Vector3 _hoverScale = new Vector3(1.1f, 1.1f, 1f);
+
+    /*
+     * Puzzle 1           → Level1 / Cluster0
+     * Puzzles  2– 9  (8) → Level2 / Cluster0–7
+     * Puzzles 10–17  (8) → Level3 / Cluster0–7
+     * Puzzles 18–25  (8) → Level4 / Cluster0–7
+     * Puzzles 26–33  (8) → Level5 / Cluster0–7
+     */
+    static readonly int[] LevelBasePuzzle = { 0, 1, 2, 10, 18, 26 };
+
+    int PuzzleNumber(int displayLevel, int clusterIndex)
+        => LevelBasePuzzle[displayLevel] + clusterIndex;
+
+    int ClusterIndex(GameObject cluster)
+        => int.Parse(cluster.name.Substring("Cluster".Length));
+
+    // Returns the Cluster-named ancestor of a tile, or null.
+    GameObject ClusterOf(GameObject tile)
+    {
+        if (tile == null) return null;
+        var parent = tile.transform.parent;
+        if (parent != null && parent.name.StartsWith("Cluster")) return parent.gameObject;
+        return null;
+    }
+
+    bool IsInCurrentLevel(GameObject cluster)
+        => cluster != null && cluster.transform.parent?.gameObject == _levels[_displayLevel - 1];
+
+    // Display level N is accessible if the next puzzle to solve is within it or beyond.
+    bool IsDisplayLevelAccessible(int displayLevel)
+        => displayLevel >= 1 && displayLevel <= 5
+        && _currentLevel >= LevelBasePuzzle[displayLevel] - 1;
+
+    // Which display level contains this puzzle number?
+    int DisplayLevelForPuzzle(int puzzleNum)
+    {
+        for (int lvl = 5; lvl >= 1; lvl--)
+            if (puzzleNum >= LevelBasePuzzle[lvl]) return lvl;
+        return 1;
+    }
 
     void ChangeState(State to)
     {
@@ -77,7 +123,6 @@ public class PuzzleMenuSceneManager : MonoBehaviour
             case State.None:
                 SolutionsPanel.SetActive(false);
                 MenuPanel.SetActive(false);
-                SolutionsPanel.SetActive(false);
                 break;
             case State.Solutions:
                 SolutionsPanel.SetActive(true);
@@ -98,28 +143,30 @@ public class PuzzleMenuSceneManager : MonoBehaviour
             case State.Loading:
                 break;
             default:
-                Debug.LogError("Unexpected _state" + to);
+                Debug.LogError("Unexpected state: " + to);
                 break;
         }
         _state = to;
     }
 
-    /*
-     * GameObject#name represents the level required to be unlocked.
-     */
-    int LevelsRequiredUnlock(GameObject metaTileParent)
+    void ShowDisplayLevel(int level)
     {
-        return Int32.Parse(metaTileParent.name.Substring(1));
+        for (int i = 0; i < _levels.Length; i++)
+            _levels[i].SetActive(i == level - 1);
+        _displayLevel = level;
+        LevelUpButton.interactable = IsDisplayLevelAccessible(_displayLevel + 1);
+        LevelDownButton.interactable = _displayLevel > 1;
+        ClearHover();
     }
 
     void Awake()
     {
-        _assetManager = this.gameObject.GetComponent<AssetManager>();
-        _audioManager = this.gameObject.GetComponent<AudioManager>();
-        _loadingManager = this.gameObject.GetComponent<LoadingManager>();
-        _persistentManager = this.gameObject.GetComponent<PersistentManager>();
-        _settingManager = this.gameObject.GetComponent<SettingManager>();
-        _solutionManager = this.gameObject.GetComponent<SolutionManager>();
+        _assetManager = GetComponent<AssetManager>();
+        _audioManager = GetComponent<AudioManager>();
+        _loadingManager = GetComponent<LoadingManager>();
+        _persistentManager = GetComponent<PersistentManager>();
+        _settingManager = GetComponent<SettingManager>();
+        _solutionManager = GetComponent<SolutionManager>();
     }
 
     void Start()
@@ -128,10 +175,13 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         _audioManager.SetPlaylist(_assetManager.GetPlaylist(LoadingManager.Scene.PuzzleMenu)).StartBGM();
         _steamManager = GameObject.Find("/SteamManager").GetComponent<SteamManager>();
         _l10nLevel = LocalizationSettings.StringDatabase.GetTableEntry("default", "level").Entry.Value;
-        int currentLevel = _persistentManager.LoadProgress(GlobalData.Slot).CurrentLevel;
+
+        _currentLevel = _persistentManager.LoadProgress(GlobalData.Slot).CurrentLevel;
         HardcoreToggle.isOn = GlobalData.IsHardcoreMode = _persistentManager.IsHardcoreMode(GlobalData.Slot);
-        HardcoreToggle.onValueChanged.AddListener((isOn) => GlobalData.IsHardcoreMode = _persistentManager.SetHardcoreMode(GlobalData.Slot, isOn));
-        TextProgress.text = $"{currentLevel * 100 / GlobalData.TotalLevel}%";
+        HardcoreToggle.onValueChanged.AddListener(isOn =>
+            GlobalData.IsHardcoreMode = _persistentManager.SetHardcoreMode(GlobalData.Slot, isOn));
+        TextProgress.text = $"{_currentLevel * 100 / GlobalData.TotalLevel}%";
+
         MenuOpenButton.onClick.AddListener(() => ChangeState(State.Menu));
         MenuCloseButton.onClick.AddListener(() => ChangeState(State.None));
         SettingOpenButton.onClick.AddListener(() => ChangeState(State.Setting));
@@ -139,50 +189,58 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         ReturnToMenuButton.onClick.AddListener(OnReturnToMenuButtonClick);
         SolutionsCloseButton.onClick.AddListener(() => ChangeState(State.None));
         QuitButton.onClick.AddListener(OnPowerOff);
-        _parentsH = GameObject.Find("/PlacedTiles/H").Children();
-        var parentsT = GameObject.Find("/PlacedTiles/T").Children();
-        var parentsF = GameObject.Find("/PlacedTiles/F").Children();
-        var parentsP = GameObject.Find("/PlacedTiles/P").Children();
-        var metaTileParents = _parentsH.Concat(parentsT).Concat(parentsF).Concat(parentsP).ToArray();
-        for (int level = 1; level <= currentLevel; level++)
-            StartCoroutine(_assetManager.LoadPuzzleFrameAsync(level, Color.white, (sprite) => {}));
-        TextCongratulations.gameObject.SetActive(currentLevel == GlobalData.TotalLevel);
-        foreach (var metaTileParent in metaTileParents)
+        LevelUpButton.onClick.AddListener(() =>
         {
-            var requiredLevel = LevelsRequiredUnlock(metaTileParent);
-            // Solved puzzle.
-            if (currentLevel > requiredLevel)
+            _audioManager.PlaySE(_assetManager.SEOK);
+            ShowDisplayLevel(_displayLevel + 1);
+        });
+        LevelDownButton.onClick.AddListener(() =>
+        {
+            _audioManager.PlaySE(_assetManager.SEOK);
+            ShowDisplayLevel(_displayLevel - 1);
+        });
+
+        // Collect level GameObjects
+        _levels = new GameObject[5];
+        for (int i = 0; i < 5; i++)
+            _levels[i] = PuzzleLayout.transform.Find("Level" + (i + 1)).gameObject;
+
+        // Apply unlock/dissolve/hide state to each cluster
+        for (int lvl = 1; lvl <= 5; lvl++)
+        {
+            foreach (var cluster in _levels[lvl - 1].Children())
             {
-                _steamManager.UnlockAchievement(requiredLevel + 1);
-            }
-            // Unresolved puzzle but shown.
-            else if (currentLevel == requiredLevel)
-            {
-                var dissolveMaterial = new Material(_assetManager.DissolveMaterial);
-                foreach (var tile in metaTileParent.Children())
+                int puzzleNum = PuzzleNumber(lvl, ClusterIndex(cluster));
+
+                if (_currentLevel >= puzzleNum)
                 {
-                    foreach (var checkmark in tile.Children())
-                        checkmark.SetActive(false);
-                    foreach (var renderer in metaTileParent.GetComponentsInChildren<SpriteRenderer>())
-                        renderer.material = dissolveMaterial;
+                    // Solved
+                    _steamManager.UnlockAchievement(puzzleNum);
                 }
-                StartCoroutine(DissolveAsync(dissolveMaterial));
-            }
-            // Hidden puzzle.
-            else
-            {
-                metaTileParent.SetActive(false);
-            }
-            // If all are not resolved, change to white.
-            if (currentLevel != GlobalData.TotalLevel)
-            {
-                foreach (var tileComponent in metaTileParent.GetComponentsInChildren<Tile>())
+                else if (_currentLevel == puzzleNum - 1)
                 {
-                    if (!Tags.match(tileComponent.gameObject, Tags.LevelTile))
-                        tileComponent.ChangeColor(Color.white);
+                    // Next puzzle to solve — dissolve animation
+                    var mat = new Material(_assetManager.DissolveMaterial);
+                    foreach (var r in cluster.GetComponentsInChildren<SpriteRenderer>())
+                        r.material = mat;
+                    StartCoroutine(DissolveAsync(mat));
+                }
+                else
+                {
+                    // Locked
+                    cluster.SetActive(false);
                 }
             }
         }
+
+        // Preload puzzle frame previews
+        for (int p = 1; p <= Math.Min(_currentLevel + 1, GlobalData.TotalLevel); p++)
+            StartCoroutine(_assetManager.LoadPuzzleFrameAsync(p, Color.white, _ => { }));
+
+        TextCongratulations.gameObject.SetActive(_currentLevel >= GlobalData.TotalLevel);
+
+        // Start at the display level that contains the next puzzle
+        ShowDisplayLevel(DisplayLevelForPuzzle(_currentLevel + 1));
         ChangeState(State.None);
     }
 
@@ -194,86 +252,111 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         while (t < se.length)
         {
             t += Time.deltaTime;
-            var ratio = Mathf.Lerp(0f, 1f, t / se.length);
-            material.SetFloat("_DissolveRatio", ratio);
+            material.SetFloat("_DissolveRatio", Mathf.Lerp(0f, 1f, t / se.length));
             yield return null;
         }
-        yield return null;
+    }
+
+    // Returns the world-space center of all SpriteRenderers in the cluster.
+    static Vector3 ClusterCenter(GameObject cluster)
+    {
+        var renderers = cluster.GetComponentsInChildren<SpriteRenderer>();
+        if (renderers.Length == 0) return cluster.transform.position;
+        var bounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++) bounds.Encapsulate(renderers[i].bounds);
+        return bounds.center;
+    }
+
+    const int HoverSortingOrderBoost = 10;
+
+    void ApplyHoverScale(GameObject cluster)
+    {
+        _activeClusterOriginalPos = cluster.transform.position;
+        var center = ClusterCenter(cluster);
+        float s = _hoverScale.x;
+        cluster.transform.localScale = _hoverScale;
+        cluster.transform.position = _activeClusterOriginalPos + (center - _activeClusterOriginalPos) * (1f - s);
+        foreach (var r in cluster.GetComponentsInChildren<SpriteRenderer>())
+            r.sortingOrder += HoverSortingOrderBoost;
+    }
+
+    void ClearHover()
+    {
+        if (_activeCluster != null)
+        {
+            _activeCluster.transform.localScale = Vector3.one;
+            _activeCluster.transform.position = _activeClusterOriginalPos;
+            foreach (var r in _activeCluster.GetComponentsInChildren<SpriteRenderer>())
+                r.sortingOrder -= HoverSortingOrderBoost;
+            _activeCluster = null;
+        }
+        Preview.gameObject.SetActive(false);
+        TextLevel.text = null;
     }
 
     void FixedUpdate()
     {
         _mousePos = _camera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        switch (_state)
+        if (_state != State.None) return;
+
+        var tile = XGameObject.AtWorldPoint(_mousePos);
+        var cluster = ClusterOf(tile);
+
+        if (cluster == null || !IsInCurrentLevel(cluster))
         {
-            case State.None:
-                {
-                    var o = XGameObject.AtWorldPoint(_mousePos);
-                    if (o == null || !_parentsH.Contains(o = o.Parent()))
-                    {
-                        Preview.gameObject.SetActive(false);
-                        TextLevel.text = null;
-                        if (_activePuzzle != null)
-                        {
-                            _activePuzzle.transform.GetChild(0).localScale /= _expansionScale;
-                            _activePuzzle = null;
-                        }
-                    }
-                    else if (o != _activePuzzle)
-                    {
-                        var level = LevelsRequiredUnlock(o) + 1;
-                        _audioManager.PlaySE(_assetManager.SEOnHoverUI);
-                        StartCoroutine(_assetManager.LoadPuzzleFrameAsync(level, Color.white, (sprite) => {
-                            Preview.gameObject.SetActive(true);
-                            Preview.sprite = sprite;
-                            TextLevel.text = $"{_l10nLevel} {level}";
-                        }));
-                        if (_activePuzzle != null)
-                        {
-                            _activePuzzle.transform.GetChild(0).localScale /= _expansionScale;
-                        }
-                        _activePuzzle = o;
-                        _activePuzzle.transform.GetChild(0).localScale *= _expansionScale;
-                    }
-                }
-                break;
-            default:
-                break;
+            if (_activeCluster != null) ClearHover();
+            return;
         }
+
+        if (cluster == _activeCluster) return;
+
+        // Switched to a new cluster
+        if (_activeCluster != null)
+        {
+            _activeCluster.transform.localScale = Vector3.one;
+            _activeCluster.transform.position = _activeClusterOriginalPos;
+            foreach (var r in _activeCluster.GetComponentsInChildren<SpriteRenderer>())
+                r.sortingOrder -= HoverSortingOrderBoost;
+        }
+
+        _activeCluster = cluster;
+        ApplyHoverScale(cluster);
+
+        int puzzleNum = PuzzleNumber(_displayLevel, ClusterIndex(cluster));
+        _audioManager.PlaySE(_assetManager.SEOnHoverUI);
+        StartCoroutine(_assetManager.LoadPuzzleFrameAsync(puzzleNum, Color.white, sprite =>
+        {
+            if (_activeCluster != cluster) return;
+            Preview.gameObject.SetActive(true);
+            Preview.sprite = sprite;
+            TextLevel.text = $"{_l10nLevel} {puzzleNum}";
+        }));
     }
 
     public void OnClick(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (!context.performed || _state != State.None) return;
+
+        var tile = XGameObject.AtWorldPoint(_mousePos);
+        var cluster = ClusterOf(tile);
+        if (cluster == null || !IsInCurrentLevel(cluster)) return;
+
+        int puzzleNum = PuzzleNumber(_displayLevel, ClusterIndex(cluster));
+        if (puzzleNum > _currentLevel + 1) return;   // locked
+
+        GlobalData.Level = puzzleNum;
+        _audioManager.PlaySE(_assetManager.SEOK);
+        if (_solutionManager.Init().HasSolution() && !GlobalData.IsHardcoreMode)
+            ChangeState(State.Solutions);
+        else
         {
-            switch (_state)
-            {
-                case State.None:
-                    var o = XGameObject.AtWorldPoint(_mousePos);
-                    if (Tags.match(o, Tags.LevelTile))
-                    {
-                        var se = _assetManager.SEOK;
-                        GlobalData.Level = LevelsRequiredUnlock(o.Parent()) + 1;
-                        if (_solutionManager.Init().HasSolution() && !GlobalData.IsHardcoreMode)
-                        {
-                            ChangeState(State.Solutions);
-                        }
-                        else {
-                            _solutionManager.OpenNewSolution();
-                            ChangeState(State.Loading);
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
+            _solutionManager.OpenNewSolution();
+            ChangeState(State.Loading);
         }
     }
 
     public void OnReturnToMenuButtonClick()
-    {
-        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Menu));
-    }
+        => StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Menu));
 
     public void OnCancel(InputAction.CallbackContext context)
     {
@@ -313,8 +396,8 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     {
         if (!context.performed) return;
 #if UNITY_EDITOR
-        // _steamManager.ResetAllAchievements();
-        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.PuzzleMenu, 0.5f, () => {
+        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.PuzzleMenu, 0.5f, () =>
+        {
             int currentLevel = _persistentManager.LoadProgress(GlobalData.Slot).CurrentLevel;
             _persistentManager.SaveProgress(GlobalData.Slot, new Progress(Math.Min(GlobalData.TotalLevel, currentLevel + 1)));
             GlobalData.GameMode = GameMode.Puzzle;

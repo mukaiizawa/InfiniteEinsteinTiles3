@@ -7,7 +7,7 @@ public static class GlobalData
 
     public static int Slot = 1;    // [1, 3]
     public static int Level = 1;    // [1, TotalLevel]
-    public static int TotalLevel = 28;
+    public static int TotalLevel = 33;
 
     public static bool IsHardcoreMode;
     public static GameMode GameMode = GameMode.Nil;
