@@ -275,14 +275,6 @@ public class TilingSceneManager : MonoBehaviour
         return _answerOuterEdges.All(outer => placedEdges.Any(e => e.StrictlyEqual(outer)));
     }
 
-    void PushRemovalHistory(GameObject[] tiles)
-    {
-        var mems = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
-        _histories.Push(Tuple.Create(Action.Remove, mems, Color.white));
-        _undoHistories.Clear();
-        GridRemove(mems.Select(m => m.Position).ToHashSet());
-    }
-
     void RemoveTiles(GameObject[] tiles, Record record)
     {
         _audioManager.PlaySE(_assetManager.SETileRemove);
@@ -381,6 +373,14 @@ public class TilingSceneManager : MonoBehaviour
     /*
      * history api
      */
+
+    void PushRemovalHistory(GameObject[] tiles)
+    {
+        var mems = tiles.Select(x => x.GetComponent<Tile>().ExportMemory()).ToArray();
+        _histories.Push(Tuple.Create(Action.Remove, mems, Color.white));
+        _undoHistories.Clear();
+        GridRemove(mems.Select(m => m.Position).ToHashSet());
+    }
 
     void ReplayHistory(bool isUndo, Tuple<Action, TileMemory[], Color> record)
     {
