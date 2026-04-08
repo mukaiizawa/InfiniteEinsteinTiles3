@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ec011f6ace14827ae524ad9e2e3e965, type: 3}
   m_Name: AssetData
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   BrushTexture: {fileID: 2800000, guid: b25b636de5f7d734cbfc75b5a387a5fc, type: 3}
   PipetteTexture: {fileID: 2800000, guid: bc123be90c35a1543bf459bfc183217c, type: 3}
   TileTexture: {fileID: 2800000, guid: cd287bbc759bf02469a9c72b3626b3dc, type: 3}
@@ -19,6 +19,7 @@ MonoBehaviour:
   DefaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   HighlightMaterial: {fileID: -876546973899608171, guid: 8c9a9d43056605d42aa2af3828fd1daa, type: 3}
   DissolveMaterial: {fileID: -876546973899608171, guid: b2e62f19709540044b7f4556a413cd5f, type: 3}
+  HoverMaterial: {fileID: 2100000, guid: 3c670a2584e322b4da1d652068b59ab1, type: 2}
   BGMTitle: {fileID: 8300000, guid: c3b6701af7c723c418676025bba0f85f, type: 3}
   BGMMenu: {fileID: 8300000, guid: 2c760e91439e24c4385c860c192512c2, type: 3}
   BGMTiling:

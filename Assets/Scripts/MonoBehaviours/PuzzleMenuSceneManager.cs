@@ -28,6 +28,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     public TextMeshProUGUI TextCongratulations;
     public Image Preview;
     public TextMeshProUGUI TextLevel;
+    public GameObject CheckMark;
     string _l10nLevel;
 
     /*
@@ -74,8 +75,17 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     int _currentLevel;   // solved puzzle count (from Progress)
 
     GameObject _activeCluster;
-    Vector3 _activeClusterOriginalPos;
-    readonly Vector3 _hoverScale = new Vector3(1.1f, 1.1f, 1f);
+    SpriteRenderer[] _activeClusterRenderers;
+    Color[] _activeClusterOriginalColors;
+    Bounds _activeClusterBounds;
+    SpriteRenderer[] _dimmedRenderers;
+    Color[] _dimmedOriginalColors;
+    const float HoverWarmShift = 0.25f;
+    const float HoverBrightnessMultiplier = 1.5f;
+    const float HoverCoolShift = 0.2f;
+    const float HoverDimMultiplier = 0.6f;
+    static readonly Color HoverWarmColor = new Color(1f, 0.85f, 0.4f);
+    static readonly Color HoverCoolColor = new Color(0.5f, 0.7f, 1f);
     bool _isTransitioning;
     const float TransitionDuration = 0.8f;
 
@@ -183,7 +193,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     {
         float vertical = b.extents.y;
         float horizontal = b.extents.x / _camera.aspect;
-        return Mathf.Max(vertical, horizontal) * 1.15f;  // 15% padding
+        return Mathf.Max(vertical, horizontal) * 1.04f;  // 4% padding
     }
 
     // Returns world-space camera offset scaled to the given orthographic size.
@@ -215,6 +225,8 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     IEnumerator TransitionLevelAsync(int from, int to)
     {
         _isTransitioning = true;
+        LevelUpButton.interactable = false;
+        LevelDownButton.interactable = false;
         ClearHover();
 
         // Activate destination level at alpha 0
@@ -304,7 +316,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
             _levelRenderers[i] = _levels[i].GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
         }
 
-        // Apply unlock/dissolve/hide state to each cluster
+        // Apply unlock/hide state to each cluster
         for (int lvl = 1; lvl <= 5; lvl++)
         {
             foreach (var cluster in _levels[lvl - 1].Children())
@@ -356,31 +368,52 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         }
     }
 
-    const int HoverSortingOrderBoost = 10;
-
-    void ApplyHoverScale(GameObject cluster)
+    void ApplyHover(GameObject cluster)
     {
-        var renderers = cluster.GetComponentsInChildren<SpriteRenderer>();
-        var center = renderers.Length > 0 ? EncapsulateBounds(renderers).center : cluster.transform.position;
-        _activeClusterOriginalPos = cluster.transform.position;
-        float s = _hoverScale.x;
-        cluster.transform.localScale = _hoverScale;
-        cluster.transform.position = _activeClusterOriginalPos + (center - _activeClusterOriginalPos) * (1f - s);
-        foreach (var r in renderers)
-            r.sortingOrder += HoverSortingOrderBoost;
+        // Hovered cluster: warm + bright
+        _activeClusterRenderers = cluster.GetComponentsInChildren<SpriteRenderer>();
+        _activeClusterBounds = EncapsulateBounds(_activeClusterRenderers);
+        _activeClusterOriginalColors = new Color[_activeClusterRenderers.Length];
+        for (int i = 0; i < _activeClusterRenderers.Length; i++)
+        {
+            var r = _activeClusterRenderers[i];
+            _activeClusterOriginalColors[i] = r.color;
+            r.color = Colors.ChangeAlpha(Colors.ShiftAndScale(r.color, HoverWarmColor, HoverWarmShift, HoverBrightnessMultiplier), r.color.a);
+        }
+
+        // Other clusters: cool + dim
+        var dimList = new System.Collections.Generic.List<SpriteRenderer>();
+        foreach (Transform child in _levels[_displayLevel - 1].transform)
+        {
+            if (!child.gameObject.activeInHierarchy || child.gameObject == cluster) continue;
+            dimList.AddRange(child.GetComponentsInChildren<SpriteRenderer>());
+        }
+        _dimmedRenderers = dimList.ToArray();
+        _dimmedOriginalColors = new Color[_dimmedRenderers.Length];
+        for (int i = 0; i < _dimmedRenderers.Length; i++)
+        {
+            var r = _dimmedRenderers[i];
+            _dimmedOriginalColors[i] = r.color;
+            r.color = Colors.ChangeAlpha(Colors.ShiftAndScale(r.color, HoverCoolColor, HoverCoolShift, HoverDimMultiplier), r.color.a);
+        }
     }
 
     void ClearHover()
     {
         if (_activeCluster != null)
         {
-            _activeCluster.transform.localScale = Vector3.one;
-            _activeCluster.transform.position = _activeClusterOriginalPos;
-            foreach (var r in _activeCluster.GetComponentsInChildren<SpriteRenderer>())
-                r.sortingOrder -= HoverSortingOrderBoost;
+            for (int i = 0; i < _activeClusterRenderers.Length; i++)
+                _activeClusterRenderers[i].color = _activeClusterOriginalColors[i];
+            _activeClusterRenderers = null;
+            _activeClusterOriginalColors = null;
+            for (int i = 0; i < _dimmedRenderers.Length; i++)
+                _dimmedRenderers[i].color = _dimmedOriginalColors[i];
+            _dimmedRenderers = null;
+            _dimmedOriginalColors = null;
             _activeCluster = null;
         }
         Preview.gameObject.SetActive(false);
+        CheckMark.SetActive(false);
         TextLevel.text = null;
     }
 
@@ -395,7 +428,13 @@ public class PuzzleMenuSceneManager : MonoBehaviour
 
         if (cluster == null || !IsInCurrentLevel(cluster))
         {
-            if (_activeCluster != null) ClearHover();
+            if (_activeCluster != null)
+            {
+                // Keep hover while mouse is still within the active cluster's bounding box
+                // (gaps between spectre-shaped tiles would otherwise cause flickering)
+                if (!_activeClusterBounds.Contains(new Vector3(_mousePos.x, _mousePos.y, _activeClusterBounds.center.z)))
+                    ClearHover();
+            }
             return;
         }
 
@@ -405,7 +444,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
         ClearHover();
 
         _activeCluster = cluster;
-        ApplyHoverScale(cluster);
+        ApplyHover(cluster);
 
         int puzzleNum = PuzzleNumber(_displayLevel, ClusterIndex(cluster));
         _audioManager.PlaySE(_assetManager.SEOnHoverUI);
@@ -415,6 +454,7 @@ public class PuzzleMenuSceneManager : MonoBehaviour
             Preview.gameObject.SetActive(true);
             Preview.sprite = sprite;
             TextLevel.text = $"{_l10nLevel} {puzzleNum}";
+            CheckMark.SetActive(puzzleNum <= _currentLevel);
         }));
     }
 
