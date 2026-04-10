@@ -267,10 +267,11 @@ public class MenuSceneManager : MonoBehaviour
         try {
 #if UNITY_STANDALONE_WIN
             var proto = "file:///";
-#else
-            var proto = "file://";
-#endif
             Application.OpenURL(proto + fn);
+#else
+            var uri = new Uri(fn);
+            Application.OpenURL(uri.AbsoluteUri);
+#endif
         }
         catch (Exception e)
         {
