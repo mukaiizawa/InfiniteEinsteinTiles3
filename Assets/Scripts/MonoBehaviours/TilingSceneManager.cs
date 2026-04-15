@@ -115,6 +115,7 @@ public class TilingSceneManager : MonoBehaviour
      */
     State _state;
     object _lock;
+    bool _isAnimating;
 
     /*
      * Managers
@@ -307,36 +308,39 @@ public class TilingSceneManager : MonoBehaviour
 
     IEnumerator RotateActiveTilesAsync(GameObject[] tiles, int angle)
     {
-        lock (_lock)
+        _isAnimating = true;
+        int frameCount = 6;
+        int anglePerFrame = angle / frameCount;
+        for (int i = 0; i < frameCount; i++)
         {
-            int frameCount = 6;
-            int anglePerFrame = angle / frameCount;
-            for (int i = 0; i < frameCount; i++)
-            {
-                ActiveTiles.transform.position = _mousePos;
-                ActiveTiles.transform.Rotate(0, 0, anglePerFrame);
-                ActiveTiles.transform.DetachChildren();
-                ActiveTiles.transform.Rotate(0, 0, -anglePerFrame);
-                foreach (GameObject tile in tiles)
-                    tile.transform.parent = ActiveTiles.transform;
-                yield return null;
-            }
+            ActiveTiles.transform.position = _mousePos;
+            ActiveTiles.transform.Rotate(0, 0, anglePerFrame);
+            ActiveTiles.transform.DetachChildren();
+            ActiveTiles.transform.Rotate(0, 0, -anglePerFrame);
+            foreach (GameObject tile in tiles)
+                tile.transform.parent = ActiveTiles.transform;
+            yield return null;
         }
+        _isAnimating = false;
     }
 
     void RotateActiveTiles(int angle)
     {
-        switch (_state)
+        lock (_lock)
         {
-            case State.Grabbing:
-            case State.Blueprint:
-                {
-                    _audioManager.PlaySE(_assetManager.SETileRotate);
-                    StartCoroutine(RotateActiveTilesAsync(ActiveTiles.Children(), angle));
-                }
-                break;
-            default:
-                break;
+            if (_isAnimating || _isDragging) return;
+            switch (_state)
+            {
+                case State.Grabbing:
+                case State.Blueprint:
+                    {
+                        _audioManager.PlaySE(_assetManager.SETileRotate);
+                        StartCoroutine(RotateActiveTilesAsync(ActiveTiles.Children(), angle));
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -1329,35 +1333,39 @@ public class TilingSceneManager : MonoBehaviour
 
     public void OnCancel(InputAction.CallbackContext context)
     {
-        if (!context.performed) return;
-        switch (_state)
+        lock (_lock)
         {
-            case State.Idle:
-                ChangeState(State.Menu);
-                break;
-            case State.Menu:
-                ChangeState(State.Idle);
-                break;
-            case State.Setting:
-                ChangeState(State.Menu);
-                break;
-            case State.Selected:
-                UnselectTiles(CollectSelectedTiles());
-                ChangeState(State.Idle);
-                break;
-            case State.Blueprint:
-            case State.Grabbing:
-                RemoveTiles(ActiveTiles.Children(), Record.Disabled);
-                ChangeState(State.Idle);
-                break;
-            case State.Paint:
-                ChangeState(State.Idle);
-                break;
-            case State.Pipette:
-                ChangeState(State.Paint);
-                break;
-            default:
-                break;
+            if (_isAnimating) return;
+            if (!context.performed) return;
+            switch (_state)
+            {
+                case State.Idle:
+                    ChangeState(State.Menu);
+                    break;
+                case State.Menu:
+                    ChangeState(State.Idle);
+                    break;
+                case State.Setting:
+                    ChangeState(State.Menu);
+                    break;
+                case State.Selected:
+                    UnselectTiles(CollectSelectedTiles());
+                    ChangeState(State.Idle);
+                    break;
+                case State.Blueprint:
+                case State.Grabbing:
+                    RemoveTiles(ActiveTiles.Children(), Record.Disabled);
+                    ChangeState(State.Idle);
+                    break;
+                case State.Paint:
+                    ChangeState(State.Idle);
+                    break;
+                case State.Pipette:
+                    ChangeState(State.Paint);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
