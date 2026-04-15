@@ -61,7 +61,7 @@ All manager components live on a single root GameObject per scene via `GetCompon
 - **`Board`** — serializable container: `TileMemory[]` + `Color[]` (30-color palette).
 - **`Solution`** — serializable save file unit. Fields: `Name`, `CreatedAt`, `UpdatedAt`, `Board`. Non-serialized fields (`GameMode`, `Slot`, `Level`, `PhysicalName`) are set at load time.
 - **`Progress`** — serializable: `CurrentLevel` int. In editor, Slot 2 = level 0 (debug), Slot 3 = all levels complete.
-- **`GlobalData`** — static globals: `GameMode`, `Slot`, `Level`, `TotalLevel` (28), `Solution`, `IsRestart`, `IsHardcoreMode`, `Tolerance` (0.31f).
+- **`GlobalData`** — static globals: `GameMode`, `Slot`, `Level`, `TotalLevel` (33), `Solution`, `IsRestart`, `IsHardcoreMode`, `Tolerance` (0.31f).
 - **`Colors`** — static color constants and helpers (`Parse`, `Format`, `ChangeAlpha`, `ChangeSaturation`). Default 30-color palette.
 - **`Tags`** — Unity tag string constants: `"Tile"`, `"LevelTile"`, `"SelectedTile"`.
 - **`GameMode`** — enum: `Nil`, `Creative`, `Puzzle`.

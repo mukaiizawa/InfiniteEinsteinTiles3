@@ -34,6 +34,7 @@ public class AssetManager : MonoBehaviour
     // BGM
     public AudioClip BGMTitle            => Data.BGMTitle;
     public AudioClip BGMMenu             => Data.BGMMenu;
+    public AudioClip BGMPuzzleMenu       => Data.BGMPuzzleMenu;
 
     // SE
     public AudioClip SEOK                => Data.SEOK;
@@ -62,8 +63,9 @@ public class AssetManager : MonoBehaviour
             case LoadingManager.Scene.Title:
                 return new AudioClip[] { Data.BGMTitle };
             case LoadingManager.Scene.Menu:
-            case LoadingManager.Scene.PuzzleMenu:
                 return new AudioClip[] { Data.BGMMenu };
+            case LoadingManager.Scene.PuzzleMenu:
+                return new AudioClip[] { Data.BGMPuzzleMenu };
             case LoadingManager.Scene.Tiling:
                 return Data.BGMTiling;
             default:

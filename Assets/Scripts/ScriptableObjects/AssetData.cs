@@ -18,6 +18,7 @@ public class AssetData : ScriptableObject
     [Header("BGM")]
     public AudioClip BGMTitle;
     public AudioClip BGMMenu;
+    public AudioClip BGMPuzzleMenu;
     public AudioClip[] BGMTiling;
 
     [Header("SE")]
