@@ -344,10 +344,6 @@ public class PuzzleMenuSceneManager : MonoBehaviour
             }
         }
 
-        // Preload puzzle frame previews
-        for (int p = 1; p <= Math.Min(_currentLevel + 1, GlobalData.TotalLevel); p++)
-            StartCoroutine(_assetManager.LoadPuzzleFrameAsync(p, Color.white, _ => { }));
-
         TextCongratulations.gameObject.SetActive(_currentLevel >= GlobalData.TotalLevel);
 
         // Start at the display level that contains the next puzzle
