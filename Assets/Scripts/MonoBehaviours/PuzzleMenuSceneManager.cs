@@ -346,8 +346,9 @@ public class PuzzleMenuSceneManager : MonoBehaviour
 
         TextCongratulations.gameObject.SetActive(_currentLevel >= GlobalData.TotalLevel);
 
-        // Start at the display level that contains the next puzzle
-        ShowDisplayLevel(DisplayLevelForPuzzle(_currentLevel + 1));
+        ShowDisplayLevel(GlobalData.Solution != null && GlobalData.Level < _currentLevel
+            ? DisplayLevelForPuzzle(GlobalData.Level)
+            : DisplayLevelForPuzzle(_currentLevel + 1));
         ChangeState(State.None);
     }
 
@@ -477,7 +478,11 @@ public class PuzzleMenuSceneManager : MonoBehaviour
     }
 
     public void OnReturnToMenuButtonClick()
-        => StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Menu));
+    {
+        GlobalData.GameMode = GameMode.Nil;
+        GlobalData.Solution = null;
+        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Menu));
+    }
 
     public void OnCancel(InputAction.CallbackContext context)
     {
