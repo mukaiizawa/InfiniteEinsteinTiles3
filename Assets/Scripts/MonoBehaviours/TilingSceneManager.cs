@@ -834,8 +834,8 @@ public class TilingSceneManager : MonoBehaviour
         else if (GlobalData.Solution.Board.PlacedTiles != null)
         {
             SpawnTiles(GlobalData.Solution.Board.PlacedTiles);
-            UpdateTileCountAndCheckSolved();
         }
+        UpdateTileCountAndCheckSolved();
 #if UNITY_EDITOR
 #else
         var origin = GameObject.Find("/Origin");
