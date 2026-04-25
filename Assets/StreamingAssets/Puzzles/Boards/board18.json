@@ -1,55 +1,24 @@
 {
-    "GrabingTiles": [],
     "PlacedTiles": [
         {
             "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Rotation": 3,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 4
-            },
-            "Rotation": 2,
-            "IsFlip": true,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
+                "x": 5.827338218688965,
+                "y": -3.046867609024048
             },
             "Rotation": 4,
-            "IsFlip": false,
             "Color": {
-                "r": 1.0,
-                "g": 1.0,
+                "r": 0.800000011920929,
+                "g": 0.0,
                 "b": 1.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": -5,
-                "y": 0
+                "x": 0.10182422399520874,
+                "y": -3.027012586593628
             },
-            "Rotation": 2,
-            "IsFlip": false,
+            "Rotation": 10,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
@@ -59,3064 +28,647 @@
         },
         {
             "Position": {
-                "x": -4,
-                "y": 0
-            },
-            "Rotation": 1,
-            "IsFlip": true,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
+                "x": 0.06468623876571655,
+                "y": -1.1713638305664063
             },
             "Rotation": 0,
-            "IsFlip": false,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
-                "b": 1.0,
+                "b": 0.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Rotation": 3,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Rotation": 2,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Rotation": 1,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
+                "x": -1.4494825601577759,
+                "y": -1.5771331787109376
             },
             "Rotation": 0,
-            "IsFlip": true,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
-                "b": 1.0,
+                "b": 0.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Rotation": 3,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
+                "x": -3.0752437114715578,
+                "y": -0.6814566850662231
             },
             "Rotation": 2,
-            "IsFlip": false,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
-                "b": 1.0,
+                "b": 0.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": 0,
-                "y": 0
-            },
-            "Rotation": 1,
-            "IsFlip": true,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Rotation": 0,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 0
-            },
-            "Rotation": 2,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 1
-            },
-            "Rotation": 1,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -1
+                "x": -4.663702011108398,
+                "y": -1.6414079666137696
             },
             "Rotation": 4,
-            "IsFlip": false,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
-                "b": 1.0,
+                "b": 0.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Rotation": 3,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -2
-            },
-            "Rotation": 0,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -1
+                "x": -3.5551536083221437,
+                "y": -2.749939441680908
             },
             "Rotation": 4,
-            "IsFlip": false,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
-                "b": 1.0,
+                "b": 0.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": -4,
-                "y": -1
+                "x": 0.17605823278427125,
+                "y": -5.372689247131348
             },
-            "Rotation": 3,
-            "IsFlip": false,
+            "Rotation": 4,
             "Color": {
-                "r": 1.0,
+                "r": 0.20000000298023225,
                 "g": 1.0,
-                "b": 1.0,
+                "b": 0.0,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": -1,
-                "y": -2
-            },
-            "Rotation": 0,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 0
-            },
-            "Rotation": 2,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 1
-            },
-            "Rotation": 1,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 0
-            },
-            "Rotation": 1,
-            "IsFlip": true,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Rotation": 0,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Rotation": 2,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 0
-            },
-            "Rotation": 1,
-            "IsFlip": true,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Rotation": 0,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Rotation": 0,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
+                "x": 3.786048173904419,
+                "y": -0.24849092960357667
             },
             "Rotation": 5,
-            "IsFlip": true,
             "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
                 "a": 1.0
             }
         },
         {
             "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Rotation": 4,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Rotation": 1,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": -1
-            },
-            "Rotation": 3,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": -1
-            },
-            "Rotation": 4,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": -1
-            },
-            "Rotation": 3,
-            "IsFlip": false,
-            "Color": {
-                "r": 1.0,
-                "g": 1.0,
-                "b": 1.0,
-                "a": 1.0
-            }
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 3
+                "x": 2.576117753982544,
+                "y": 1.644345998764038
             },
             "Rotation": 2,
-            "IsFlip": false,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
+        },
+        {
+            "Position": {
+                "x": 0.9875997304916382,
+                "y": 0.6844173669815064
+            },
+            "Rotation": 4,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
+        },
+        {
+            "Position": {
+                "x": 2.09612774848938,
+                "y": -0.42411375045776369
+            },
+            "Rotation": 4,
             "Color": {
                 "r": 1.0,
                 "g": 1.0,
                 "b": 1.0,
                 "a": 1.0
             }
-        }
-    ],
-    "PartialHexes": [
-        {
-            "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 4
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 4
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 4
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 4
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": -1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 4
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -6,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 4
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 4
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 4
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 4
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 1,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": -2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -4,
-                "y": -2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -5,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -1,
-                "y": -1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 0,
-                "y": -2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": -3,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": -2,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": -1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 0
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 0
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 0
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 0
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": -1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": -1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 0
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 1
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 6,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 4
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 2,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 4
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 3,
-                "y": 4
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 3
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 3
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 2
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 2
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 2
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Nth": 5
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 1
-            },
-            "Nth": 0
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 1
-            },
-            "Nth": 1
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 2
-            },
-            "Nth": 2
-        },
-        {
-            "Position": {
-                "x": 4,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 2
-            },
-            "Nth": 3
-        },
-        {
-            "Position": {
-                "x": 5,
-                "y": 2
-            },
-            "Nth": 4
-        },
-        {
-            "Position": {
-                "x": 7,
-                "y": -1
-            },
-            "Nth": 2
         },
         {
             "Position": {
-                "x": 7,
-                "y": -1
+                "x": 4.164586067199707,
+                "y": -1.6612741947174073
             },
-            "Nth": 3
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 7,
-                "y": -1
+                "x": -6.962346076965332,
+                "y": -4.974367141723633
             },
-            "Nth": 4
+            "Rotation": 7,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 7,
-                "y": -1
+                "x": -5.586643218994141,
+                "y": -3.4972641468048097
             },
-            "Nth": 5
+            "Rotation": 0,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 8,
-                "y": -2
+                "x": -2.7066943645477297,
+                "y": 1.451287031173706
             },
-            "Nth": 4
+            "Rotation": 6,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 8,
-                "y": -2
+                "x": -1.0810190439224244,
+                "y": 0.5555496215820313
             },
-            "Nth": 5
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 7,
-                "y": -2
+                "x": -0.6752792000770569,
+                "y": 2.0697615146636965
             },
-            "Nth": 0
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 7,
-                "y": -2
+                "x": 0.9132016897201538,
+                "y": 3.029857873916626
             },
-            "Nth": 1
+            "Rotation": 10,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 6,
-                "y": -1
+                "x": -7.137982368469238,
+                "y": -3.2845451831817629
             },
-            "Nth": 1
+            "Rotation": 8,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 6,
-                "y": -1
+                "x": 2.134040117263794,
+                "y": -2.279008388519287
             },
-            "Nth": 2
+            "Rotation": 6,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -1
+                "x": 3.7596046924591066,
+                "y": -3.174760103225708
             },
-            "Nth": 1
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -1
+                "x": 1.765601396560669,
+                "y": -4.411686897277832
             },
-            "Nth": 2
+            "Rotation": 2,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -1
+                "x": 1.285645842552185,
+                "y": -6.480311393737793
             },
-            "Nth": 3
+            "Rotation": 4,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -1
+                "x": 2.6978390216827394,
+                "y": -6.859233856201172
             },
-            "Nth": 4
+            "Rotation": 1,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 6,
-                "y": -1
+                "x": 4.90494441986084,
+                "y": -4.90205192565918
             },
-            "Nth": 3
+            "Rotation": 0,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 6,
-                "y": -1
+                "x": 3.390713930130005,
+                "y": -5.307794570922852
             },
-            "Nth": 4
+            "Rotation": 0,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 6,
-                "y": -2
+                "x": 4.942763328552246,
+                "y": -6.757952690124512
             },
-            "Nth": 5
+            "Rotation": 10,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 6,
-                "y": -2
+                "x": -4.736834526062012,
+                "y": 0.7049823999404907
             },
-            "Nth": 0
+            "Rotation": 10,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -2
+                "x": -6.73116397857666,
+                "y": -1.7685856819152833
             },
-            "Nth": 0
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -2
+                "x": -6.325421333312988,
+                "y": -0.25435352325439455
             },
-            "Nth": 1
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 4,
-                "y": -1
+                "x": -8.357328414916993,
+                "y": -0.8733896017074585
             },
-            "Nth": 2
+            "Rotation": 6,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 4,
-                "y": -1
+                "x": 0.8769239187240601,
+                "y": 4.888440132141113
             },
-            "Nth": 3
+            "Rotation": 0,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 4,
-                "y": -1
+                "x": -0.6373868584632874,
+                "y": 4.482688903808594
             },
-            "Nth": 4
+            "Rotation": 0,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 4,
-                "y": -1
+                "x": -4.774348258972168,
+                "y": 2.5627341270446779
             },
-            "Nth": 5
+            "Rotation": 0,
+            "Color": {
+                "r": 0.20000000298023225,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -2
+                "x": -2.141627788543701,
+                "y": -3.1257426738739015
             },
-            "Nth": 4
+            "Rotation": 1,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 5,
-                "y": -2
+                "x": -0.8601918816566467,
+                "y": 8.545629501342774
             },
-            "Nth": 5
+            "Rotation": 3,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 4,
-                "y": -2
+                "x": -0.26886898279190066,
+                "y": 6.615692138671875
             },
-            "Nth": 0
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 4,
-                "y": -2
+                "x": 0.6910642981529236,
+                "y": 7.852790832519531
             },
-            "Nth": 1
+            "Rotation": 4,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 3,
-                "y": -1
+                "x": -6.288357734680176,
+                "y": 2.1556146144866945
             },
-            "Nth": 1
+            "Rotation": 0,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 3,
-                "y": -1
+                "x": -7.322615623474121,
+                "y": 1.122063159942627
             },
-            "Nth": 2
+            "Rotation": 9,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 2,
-                "y": 3
+                "x": 2.945510149002075,
+                "y": 3.7786028385162355
             },
-            "Nth": 3
+            "Rotation": 6,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 2,
-                "y": 3
+                "x": 1.800502061843872,
+                "y": 6.7425079345703129
             },
-            "Nth": 4
+            "Rotation": 4,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 2,
-                "y": 3
+                "x": 2.909003496170044,
+                "y": 5.634033203125
             },
-            "Nth": 5
+            "Rotation": 4,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 2,
-                "y": 3
+                "x": 3.3888676166534426,
+                "y": 7.703181266784668
             },
-            "Nth": 0
+            "Rotation": 2,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 2,
-                "y": 2
+                "x": 4.570956230163574,
+                "y": 2.884387969970703
             },
-            "Nth": 5
+            "Rotation": 8,
+            "Color": {
+                "r": 0.20000000298023225,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 2,
-                "y": 2
+                "x": -1.6718155145645142,
+                "y": 3.4486443996429445
             },
-            "Nth": 0
+            "Rotation": 9,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 1,
-                "y": 3
+                "x": 7.795198440551758,
+                "y": -3.496807336807251
             },
-            "Nth": 1
+            "Rotation": 11,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 1,
-                "y": 3
+                "x": 6.419564247131348,
+                "y": -4.4937744140625
             },
-            "Nth": 2
+            "Rotation": 0,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 1,
-                "y": 4
+                "x": 4.9753522872924809,
+                "y": 4.399127960205078
             },
-            "Nth": 2
+            "Rotation": 8,
+            "Color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            }
         },
         {
             "Position": {
-                "x": 1,
-                "y": 4
+                "x": 4.597418785095215,
+                "y": 5.811602592468262
             },
-            "Nth": 3
+            "Rotation": 5,
+            "Color": {
+                "r": 0.7764706015586853,
+                "g": 0.7764706015586853,
+                "b": 0.7764706015586853,
+                "a": 1.0
+            }
         }
     ],
     "ColorPalette": [
         {
-            "r": 1.0,
-            "g": 1.0,
-            "b": 1.0,
+            "r": 0.7764706015586853,
+            "g": 0.7764706015586853,
+            "b": 0.7764706015586853,
             "a": 1.0
         },
         {
@@ -3236,7 +788,7 @@
         {
             "r": 1.0,
             "g": 1.0,
-            "b": 1.0,
+            "b": 0.0,
             "a": 1.0
         },
         {
