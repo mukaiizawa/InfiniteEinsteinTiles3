@@ -573,8 +573,8 @@ public class TilingSceneManager : MonoBehaviour
             case GameMode.Creative:
                 if (withSave) action = () => _persistentManager.SaveSolution(UpdatedSolution());
                 GlobalData.GameMode = GameMode.Nil;
-                GlobalData.Solution = null;
                 StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Menu, minLoadingTime: 1f, action: action));
+                GlobalData.Solution = null;
                 break;
             case GameMode.Puzzle:
                 if (withSave) _persistentManager.SaveSolution(UpdatedSolution());
