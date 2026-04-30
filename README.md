@@ -1,12 +1,12 @@
-# Infinite Einstein Tiles2
-This is the source code for Infinite Einstein Tiles2!
+# Infinite Einstein Tiles3
+This is the source code for Infinite Einstein Tiles3!
 
-[![Infinite Einstein Tiles2 Logo](./Logo.png)](https://store.steampowered.com/app/3893930/Infinite_Einstein_Tiles2/)
+[![Infinite Einstein Tiles3 Logo](./Logo.png)](https://store.steampowered.com/app/4553450/Infinite_Einstein_Tiles3/)
 
 ## Building
-Infinite Einsten Tiles2 is a game made in unity. Clone the repository and import it into unity; there are many detailed instructions on the web on how to run this in unity, so I won't go into them here.
+Infinite Einsten Tiles3 is a game made in unity. Clone the repository and import it into unity; there are many detailed instructions on the web on how to run this in unity, so I won't go into them here.
 
-If you are unable to do so, please consider purchasing on [Steam](https://store.steampowered.com/app/3893930/Infinite_Einstein_Tiles2/).
+If you are unable to do so, please consider purchasing on [Steam](https://store.steampowered.com/app/4553450/Infinite_Einstein_Tiles3/).
 
 ### Unity Version
 - 6000.0.35f1
@@ -18,3 +18,7 @@ Read [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
 
 ## License
 Unless otherwise noted, the code in this repository is licensed under `Apache-2.0`. Read [LICENSE](./LICENSE) for the full license.
+
+## See Also
+- [Infinite Einstein Tiles](https://github.com/mukaiizawa/InfiniteEinsteinTiles) — previous work
+- [Infinite Einstein Tiles2](https://github.com/mukaiizawa/InfiniteEinsteinTiles2) — previous work
