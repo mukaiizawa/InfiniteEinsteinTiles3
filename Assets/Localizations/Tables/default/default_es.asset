@@ -19,15 +19,13 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "\xBFHas notado la simetr\xEDa rotacional?\r\nNo es necesario colocar
-      cada pieza una por una.\r\nPrueba a seleccionar un \xE1rea con Ctrl + arrastrar
-      y copiarla."
+    m_Localized: "Este tambi\xE9n es un cl\xFAster importante necesario para el teselado
+      aperi\xF3dico."
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: "\xBFTienes problemas para resolverlo?\r\nPuedes voltear la pieza
-      que has agarrado usando la tecla F.\r\n\r\n\xBFHas colocado la pieza incorrectamente?\r\nHaz
-      clic derecho para eliminar las piezas innecesarias."
+  - m_Id: 128638358116409344
+    m_Localized: "Esta combinaci\xF3n de piezas recibe el apodo de \xABMystic\xBB
+      en el art\xEDculo."
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -328,6 +326,50 @@ MonoBehaviour:
       completa, salvo que los logros no est\xE1n disponibles. Esto significa que
       puedes jugar todos los rompecabezas incluidos en la versi\xF3n completa. Adem\xE1s,
       los datos guardados son comunes con la versi\xF3n completa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: "Este tambi\xE9n es un cl\xFAster importante necesario para el teselado
+      aperi\xF3dico."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: "\xBFTe resulta tedioso hacer clic en la pieza inferior derecha
+      para colocarla? Pulsa la tecla C sobre una pieza ya colocada para copiarla."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: "Mant\xE9n pulsado Ctrl y desplaza la rueda del rat\xF3n para mover
+      la c\xE1mara. Primero, echa un vistazo general a todo el puzzle. Mant\xE9n
+      pulsado Ctrl y arrastra para seleccionar piezas en un \xE1rea. Luego pulsa
+      C para copiar o X para cortar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: "Este grupo de piezas tiene simetr\xEDa rotacional, pero existe
+      dentro de un teselado aperi\xF3dico."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: "\xBFNo te parece que este grupo de piezas tiene forma de hex\xE1gono?
+      Los hex\xE1gonos desempe\xF1an un papel importante en el teselado aperi\xF3dico
+      del Spectre."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: "Este puzle puede resultarle familiar a quienes hayan jugado al
+      juego anterior. Con piezas volteadas, tambi\xE9n son posibles teselados como
+      Hat o Turtle. Descubre en este juego qu\xE9 ocurre a medida que avanzan las
+      generaciones."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: "Pulsa el bot\xF3n de la paleta para colorear las piezas. Usa los
+      colores para mejorar la visibilidad."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: "Este es un cl\xFAster importante necesario para el teselado aperi\xF3dico."
     m_Metadata:
       m_Items: []
   references:

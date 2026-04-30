@@ -19,16 +19,12 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "Czy zauwa\u017Cy\u0142e\u015B symetri\u0119 obrotow\u0105?\r\nNie
-      musisz uk\u0142ada\u0107 ka\u017Cdej p\u0142ytki pojedynczo.\r\nSpr\xF3buj
-      zaznaczy\u0107 obszar za pomoc\u0105 Ctrl + przeci\u0105gni\u0119cia i skopiowa\u0107."
+    m_Localized: "To r\xF3wnie\u017C wa\u017Cny klaster niezb\u0119dny do aperiodycznego
+      teselowania."
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: "Masz trudno\u015Bci z rozwi\u0105zaniem?\r\nMo\u017Cesz obr\xF3ci\u0107
-      chwycony kafelek za pomoc\u0105 klawisza F.\r\n\r\n\u0179le umie\u015Bci\u0142e\u015B
-      kafelek?\r\nKliknij prawym przyciskiem myszy, aby usun\u0105\u0107 niepotrzebne
-      kafelki."
+  - m_Id: 128638358116409344
+    m_Localized: "Ta kombinacja kafelk\xF3w w artykule naukowym nosi przydomek \u201EMystic\u201D."
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -328,6 +324,51 @@ MonoBehaviour:
       Oznacza to, \u017Ce mo\u017Cesz zagra\u0107 we wszystkie zagadki zawarte w
       pe\u0142nej wersji. Ponadto dane zapisu s\u0105 wsp\xF3lne z pe\u0142n\u0105
       wersj\u0105."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: "To r\xF3wnie\u017C wa\u017Cny klaster niezb\u0119dny do aperiodycznego
+      teselowania."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: "Czy klikanie kafelka w prawym dolnym rogu w celu jego umieszczenia
+      jest uci\u0105\u017Cliwe? Naci\u015Bnij C nad ju\u017C umieszczonym kafelkiem,
+      aby go skopiowa\u0107."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: "Przytrzymaj Ctrl i przewi\u0144 k\xF3\u0142ko myszy, aby przesun\u0105\u0107
+      kamer\u0119. Najpierw sp\xF3jrz na ca\u0142\u0105 uk\u0142adank\u0119 z g\xF3ry.
+      Przytrzymaj Ctrl i przeci\u0105gnij, aby zaznaczy\u0107 kafelki w obszarze.
+      Nast\u0119pnie naci\u015Bnij C, aby skopiowa\u0107, lub X, aby wyci\u0105\u0107."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: "Ta grupa kafelk\xF3w ma symetri\u0119 obrotow\u0105, ale istnieje
+      w ramach aperiodycznego teselowania."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: "Czy ta grupa kafelk\xF3w nie wygl\u0105da jak sze\u015Bciok\u0105t?
+      Sze\u015Bciok\u0105ty odgrywaj\u0105 wa\u017Cn\u0105 rol\u0119 w aperiodycznym
+      teselowaniu Spectre."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: "Ta zagadka mo\u017Ce by\u0107 znajoma osobom, kt\xF3re gra\u0142y
+      w poprzedni\u0105 gr\u0119. Przy u\u017Cyciu odwr\xF3conych kafelk\xF3w mo\u017Cliwe
+      s\u0105 r\xF3wnie\u017C teselowania takie jak Hat czy Turtle. Do\u015Bwiadcz
+      w tej grze, co si\u0119 dzieje w miar\u0119 up\u0142ywu pokole\u0144."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: "Naci\u015Bnij przycisk palety, aby pokolorowa\u0107 kafelki. U\u017Cyj
+      kolor\xF3w, aby poprawi\u0107 widoczno\u015B\u0107."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: "To wa\u017Cny klaster niezb\u0119dny do aperiodycznego teselowania."
     m_Metadata:
       m_Items: []
   references:

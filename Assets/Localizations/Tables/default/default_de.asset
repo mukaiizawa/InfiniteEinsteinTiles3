@@ -19,15 +19,13 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "Haben Sie die Rotationssymmetrie bemerkt?\r\nSie m\xFCssen nicht
-      jede Kachel einzeln platzieren.\r\nVersuchen Sie, mit Strg + Ziehen einen Bereich
-      auszuw\xE4hlen und zu kopieren."
+    m_Localized: "Dies ist ebenfalls ein wichtiger Cluster, der f\xFCr die aperiodische
+      Kachelung notwendig ist."
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: "Haben Sie Probleme beim L\xF6sen?\r\nSie k\xF6nnen die gegriffene
-      Kachel mit der F-Taste umdrehen.\r\n\r\nFalsch platzierte Kachel?\r\nRechtsklick
-      zum Entfernen unn\xF6tiger Kacheln."
+  - m_Id: 128638358116409344
+    m_Localized: "Diese Kachelkombination tr\xE4gt in der Ver\xF6ffentlichung den
+      Spitznamen \u201EMystic\u201D."
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -335,6 +333,51 @@ MonoBehaviour:
       Erfolge nicht verf\xFCgbar sind. Das bedeutet, dass Sie alle R\xE4tsel der
       Vollversion spielen k\xF6nnen. Au\xDFerdem werden die Spieldaten mit der Vollversion
       gemeinsam genutzt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: "Dies ist ebenfalls ein wichtiger Cluster, der f\xFCr die aperiodische
+      Kachelung notwendig ist."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: "Ist es l\xE4stig, die Kachel unten rechts anzuklicken, um sie zu
+      platzieren? Dr\xFCcke C \xFCber einer bereits platzierten Kachel, um sie zu
+      kopieren."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: "Halte Ctrl gedr\xFCckt und scrolle mit dem Mausrad, um die Kamera
+      zu verschieben. Verschaffe dir zun\xE4chst einen \xDCberblick \xFCber das gesamte
+      Puzzle. Halte Ctrl gedr\xFCckt und ziehe, um Kacheln in einem Bereich auszuw\xE4hlen.
+      Dr\xFCcke dann C zum Kopieren oder X zum Ausschneiden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: Diese Kachelgruppe besitzt Rotationssymmetrie, existiert aber innerhalb
+      einer aperiodischen Kachelung.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: Sieht diese Kachelgruppe nicht wie ein Hexagon aus? Hexagone spielen
+      eine wichtige Rolle in der aperiodischen Kachelung des Spectre.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: "Dieses R\xE4tsel k\xF6nnte Spielern, die das vorherige Spiel gespielt
+      haben, vertraut sein. Mit gespiegelten Kacheln sind auch Kachelungen wie Hat
+      oder Turtle m\xF6glich. Erlebe in diesem Spiel, was passiert, wenn Generationen
+      vergehen."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: "Dr\xFCcke die Schaltfl\xE4che f\xFCr die Palette, um Kacheln einzuf\xE4rben.
+      Verwende Farben, um die \xDCbersichtlichkeit zu verbessern."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: "Dies ist ein wichtiger Cluster, der f\xFCr die aperiodische Kachelung
+      notwendig ist."
     m_Metadata:
       m_Items: []
   references:

@@ -761,38 +761,43 @@ public class TilingSceneManager : MonoBehaviour
                         case 2:
                         case 3:
                         case 4:
-                        case 5:    // 15s
-                        case 6:    // 27s
-                        case 7:    // 17s
-                        case 8:    // 15s
-                        case 13:    // 15
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
                             _remainingTime = 60f;
                             break;
-                        case 9:    // 31s
-                        case 11:    // 34
-                        case 12:    // 33
-                            _remainingTime = 180f;
-                            break;
-                        case 14:    // 86
-                        case 16:    // 82
-                        case 21:    // 91
-                        case 23:    // 97
+                        case 10:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                        case 15:
+                        case 16:
+                        case 17:
+                        case 31:
                             _remainingTime = 300f;
                             break;
-                        case 10:    // 122s
-                        case 15:    // 162
-                        case 17:    // 117
-                        case 20:    // 141
-                        case 18:    // 151
-                        case 19:    // 175
-                        case 22:    // 276
-                        case 24:    // 121
-                        case 25:    // 116
-                        case 26:    // 148
-                        case 27:    // 111
+                        case 18:
+                        case 19:
+                        case 20:
+                        case 21:
+                        case 22:
+                        case 23:
+                        case 24:
+                        case 25:
+                        case 32:
+                            _remainingTime = 480f;
+                            break;
+                        case 26:
+                        case 27:
+                        case 28:
+                        case 29:
+                        case 30:
                             _remainingTime = 600f;
                             break;
-                        case 28:
+                        case 33:
                             _remainingTime = 3600f;
                             break;
                         default:
@@ -802,9 +807,16 @@ public class TilingSceneManager : MonoBehaviour
                     switch (GlobalData.Level)
                     {
                         case 1:
-                        case 4:
+                        case 2:
                         case 8:
-                        case 28:
+                        case 9:
+                        case 11:
+                        case 17:
+                        case 22:
+                        case 23:
+                        case 31:
+                        case 32:
+                        case 33:
                             Hint.SetActive(true);
                             var tmp = Hint.GetComponentInChildren<TextMeshProUGUI>();
                             if (tmp != null)

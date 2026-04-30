@@ -19,15 +19,13 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "Hai notato la simmetria rotazionale?\r\nNon \xE8 necessario posizionare
-      ogni tessera una per una.\r\nProva a selezionare un'area con Ctrl + trascinamento
-      e copiarla."
+    m_Localized: "Anche questo \xE8 un cluster importante necessario per la tassellatura
+      aperiodica."
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: "Hai difficolt\xE0 a risolverlo?\r\nPuoi capovolgere la tessera
-      che hai afferrato con il tasto F.\r\n\r\nHai posizionato la tessera sbagliata?\r\nFai
-      clic destro per eliminare le tessere inutili."
+  - m_Id: 128638358116409344
+    m_Localized: "Questa combinazione di tessere \xE8 soprannominata \xABMystic\xBB
+      nel paper."
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -328,6 +326,50 @@ MonoBehaviour:
       fatto che gli obiettivi non sono disponibili. Ci\xF2 significa che puoi giocare
       a tutti i puzzle inclusi nella versione completa. Inoltre, i dati di salvataggio
       sono condivisi con la versione completa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: "Anche questo \xE8 un cluster importante necessario per la tassellatura
+      aperiodica."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: "\xC8 noioso fare clic sulla tessera in basso a destra per posizionarla?
+      Premi il tasto C sopra una tessera gi\xE0 posizionata per copiarla."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: Tieni premuto Ctrl e scorri la rotella del mouse per spostare la
+      telecamera. Prima di tutto, osserva l'intero puzzle dall'alto. Tieni premuto
+      Ctrl e trascina per selezionare le tessere in un'area. Poi premi C per copiare
+      o X per tagliare.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: Questo gruppo di tessere ha simmetria rotazionale, eppure esiste
+      all'interno di una tassellatura aperiodica.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: Questo gruppo di tessere non sembra un esagono? Gli esagoni svolgono
+      un ruolo importante nella tassellatura aperiodica dello Spectre.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: Questo puzzle potrebbe essere familiare a chi ha giocato al gioco
+      precedente. Con le tessere specchiate, sono possibili anche tassellature come
+      Hat o Turtle. Scopri in questo gioco cosa accade man mano che le generazioni
+      si susseguono.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: "Premi il pulsante della tavolozza per colorare le tessere. Usa
+      i colori per migliorare la visibilit\xE0."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: "Questo \xE8 un cluster importante necessario per la tassellatura
+      aperiodica."
     m_Metadata:
       m_Items: []
   references:

@@ -19,15 +19,13 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "Voc\xEA percebeu a simetria rotacional?\r\nVoc\xEA n\xE3o precisa
-      posicionar cada pe\xE7a uma por uma.\r\nExperimente selecionar uma \xE1rea
-      com Ctrl + arrastar e copiar."
+    m_Localized: "Este tamb\xE9m \xE9 um cluster importante necess\xE1rio para o
+      mosaico aperi\xF3dico."
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: "Est\xE1 tendo dificuldades para resolver?\r\nVoc\xEA pode virar
-      a pe\xE7a que pegou usando a tecla F.\r\n\r\nColocou a pe\xE7a errada?\r\nClique
-      com o bot\xE3o direito para remover pe\xE7as desnecess\xE1rias."
+  - m_Id: 128638358116409344
+    m_Localized: "Esta combina\xE7\xE3o de pe\xE7as \xE9 apelidada de \xABMystic\xBB
+      no artigo."
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -326,6 +324,48 @@ MonoBehaviour:
       que voc\xEA pode jogar todos os quebra-cabe\xE7as inclu\xEDdos na vers\xE3o
       completa. Al\xE9m disso, os dados de salvamento s\xE3o compartilhados com a
       vers\xE3o completa."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: "Este tamb\xE9m \xE9 um cluster importante necess\xE1rio para o
+      mosaico aperi\xF3dico."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: "\xC9 tedioso clicar na pe\xE7a no canto inferior direito para coloc\xE1-la?
+      Pressione a tecla C sobre uma pe\xE7a j\xE1 colocada para copi\xE1-la."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: "Segure Ctrl e role a roda do mouse para mover a c\xE2mera. Primeiro,
+      tenha uma vis\xE3o geral de todo o puzzle. Segure Ctrl e arraste para selecionar
+      pe\xE7as em uma \xE1rea. Em seguida, pressione C para copiar ou X para recortar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: "Este grupo de pe\xE7as tem simetria rotacional, mas existe dentro
+      de um mosaico aperi\xF3dico."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: "Este grupo de pe\xE7as n\xE3o parece um hex\xE1gono? Os hex\xE1gonos
+      desempenham um papel importante no mosaico aperi\xF3dico do Spectre."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: "Este puzzle pode ser familiar para quem jogou o jogo anterior.
+      Com pe\xE7as espelhadas, pavimentos como Hat ou Turtle tamb\xE9m s\xE3o poss\xEDveis.
+      Experiencie neste jogo o que acontece \xE0 medida que as gera\xE7\xF5es se
+      sucedem."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: "Pressione o bot\xE3o de paleta para colorir as pe\xE7as. Use as
+      cores para melhorar a visibilidade."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: "Este \xE9 um cluster importante necess\xE1rio para o mosaico aperi\xF3dico."
     m_Metadata:
       m_Items: []
   references:

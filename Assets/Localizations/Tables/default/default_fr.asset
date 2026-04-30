@@ -19,15 +19,13 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "Avez-vous remarqu\xE9 la sym\xE9trie de rotation ?\r\nVous n'avez
-      pas besoin de placer chaque tuile une par une.\r\nEssayez de s\xE9lectionner
-      une zone avec Ctrl + glisser et de la copier."
+    m_Localized: "Il s'agit \xE9galement d'un cluster important n\xE9cessaire au
+      pavage ap\xE9riodique."
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: "Vous avez du mal \xE0 le r\xE9soudre ?\r\nVous pouvez retourner
-      la tuile que vous avez saisie avec la touche F.\r\n\r\nVous avez mal plac\xE9
-      une tuile ?\r\nFaites un clic droit pour supprimer les tuiles inutiles."
+  - m_Id: 128638358116409344
+    m_Localized: "Cette combinaison de tuiles a re\xE7u le surnom de \xAB Mystic
+      \xBB dans l'article."
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -326,6 +324,50 @@ MonoBehaviour:
       \xE0 l\u2019exception des succ\xE8s qui ne sont pas disponibles. Cela signifie
       que vous pouvez jouer \xE0 toutes les \xE9nigmes incluses dans la version compl\xE8te.
       De plus, les donn\xE9es de sauvegarde sont communes avec la version compl\xE8te."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: "Il s'agit \xE9galement d'un cluster important n\xE9cessaire au
+      pavage ap\xE9riodique."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: "Vous trouvez fastidieux de cliquer sur la tuile en bas \xE0 droite
+      pour la placer ? Appuyez sur C au-dessus d'une tuile d\xE9j\xE0 pos\xE9e pour
+      la copier."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: "Maintenez Ctrl enfonc\xE9 et faites d\xE9filer la molette de la
+      souris pour d\xE9placer la cam\xE9ra. Commencez par avoir une vue d'ensemble
+      du puzzle. Maintenez Ctrl enfonc\xE9 et faites glisser pour s\xE9lectionner
+      des tuiles dans une zone. Ensuite, appuyez sur C pour copier ou X pour couper."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: "Ce groupe de tuiles poss\xE8de une sym\xE9trie de rotation, mais
+      il existe au sein d'un pavage ap\xE9riodique."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: "Ce groupe de tuiles ne ressemble-t-il pas \xE0 un hexagone ? Les
+      hexagones jouent un r\xF4le important dans le pavage ap\xE9riodique du Spectre."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: "Cette \xE9nigme sera peut-\xEAtre famili\xE8re \xE0 ceux qui ont
+      jou\xE9 au jeu pr\xE9c\xE9dent. Avec des tuiles retourn\xE9es, des pavages
+      tels que Hat ou Turtle sont \xE9galement possibles. D\xE9couvrez dans ce jeu
+      ce qui se passe au fil des g\xE9n\xE9rations."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: "Appuyez sur le bouton de la palette pour colorier les tuiles. Utilisez
+      les couleurs pour am\xE9liorer la lisibilit\xE9."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: "Il s'agit d'un cluster important n\xE9cessaire au pavage ap\xE9riodique."
     m_Metadata:
       m_Items: []
   references:

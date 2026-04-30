@@ -19,23 +19,11 @@ MonoBehaviour:
     m_Items: []
   m_TableData:
   - m_Id: 15122665883082752
-    m_Localized: "Did you notice the rotational symmetry?\r\nYou don\u2019t need
-      to place each tile one by one.\r\nTry selecting an area with Ctrl + drag and
-      copying."
+    m_Localized: This is also an important cluster necessary for aperiodic tiling.
     m_Metadata:
       m_Items: []
-  - m_Id: 15122424656076800
-    m_Localized: 'Having trouble solving it?
-
-      You can flip the tile you grabbed
-      using the F key.
-
-
-
-      Placed the wrong tile?
-
-      Right-click to remove
-      unnecessary tiles.'
+  - m_Id: 128638358116409344
+    m_Localized: This tile combination is nicknamed "Mystic" in the paper.
     m_Metadata:
       m_Items: []
   - m_Id: 15121970022883328
@@ -192,7 +180,9 @@ MonoBehaviour:
       of David Smith and the wonderful work of the paper''s co-authors, Joseph Samuel
       Myers, Craig S. Kaplan, and Chaim Goodman-Strauss.  Our heartfelt thanks.
 
+      
 
+      
 
       We
       also note that any issues in this game bear no relation to them.'
@@ -339,6 +329,45 @@ MonoBehaviour:
     m_Localized: The demo version is identical to the full version except that achievements
       are not available. This means you can play all the puzzles included in the
       full version. In addition, save data is shared with the full version.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352384
+    m_Localized: This is also an important cluster necessary for aperiodic tiling.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358158352385
+    m_Localized: Is it tedious to click the bottom-right tile to place it? Press
+      the C key over an already-placed tile to copy it.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546688
+    m_Localized: Hold Ctrl and scroll the mouse wheel to reposition the camera. First,
+      get an overview of the entire puzzle. Hold Ctrl and drag to select tiles in
+      an area. Then press C to copy or X to cut.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546689
+    m_Localized: This group of tiles has rotational symmetry, yet it exists within
+      an aperiodic tiling.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546690
+    m_Localized: Doesn't this group of tiles look like a hexagon? Hexagons play an
+      important role in the aperiodic tiling of the Spectre.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546691
+    m_Localized: This may be a familiar puzzle for those who have played the previous
+      game. With mirrored tiles, tilings like Hat or Turtle are also possible. Try
+      experiencing in this game what happens as generations progress.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128638358162546692
+    m_Localized: Press the palette button to color tiles. Use colors to improve visibility.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 128642333423214592
+    m_Localized: This is an important cluster necessary for aperiodic tiling.
     m_Metadata:
       m_Items: []
   references:
