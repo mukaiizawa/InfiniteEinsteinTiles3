@@ -29841,7 +29841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &680842962
 RectTransform:
   m_ObjectHideFlags: 0
@@ -29856,10 +29856,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1098691072}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -0.0024414062, y: 144.94}
-  m_SizeDelta: {x: 0, y: 790.51}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 540.35}
+  m_SizeDelta: {x: 0, y: 1080.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &680842963
 MonoBehaviour:
@@ -29881,7 +29881,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Infinite Einstein Tiles3
+  m_text: 'Infinite
+
+    Einstein
+
+    Tiles3'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 8232aafb43a7af648b936e636c97eb44, type: 2}
@@ -29915,12 +29919,12 @@ MonoBehaviour:
   m_fontSizeMin: 0
   m_fontSizeMax: 100
   m_fontStyle: 33
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -20
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 50
@@ -29946,7 +29950,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -1.3547058, z: 0, w: 0}
+  m_margin: {x: 42.80658, y: 613.7577, z: 365.82385, w: -0.0000000332216}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -72958,7 +72962,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1760106926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72976,7 +72980,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.4
+  m_Intensity: 1.2
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000
@@ -72995,8 +72999,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 5.2348, y: -7.2328, z: 0}
-    m_Extent: {x: 15.735199, y: 17.7336, z: 0}
+    m_Center: {x: 7.18695, y: -7.2421, z: 0}
+    m_Extent: {x: 17.68615, y: 17.7428, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -73007,8 +73011,9 @@ MonoBehaviour:
   m_ShapeLightFalloffSize: 10
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
-  - {x: 2.9454622, y: -14.965438, z: 0}
-  - {x: 10.97011, y: -14.959723, z: 0}
+  - {x: 5.7559395, y: -14.965439, z: 0}
+  - {x: 14.8731, y: -14.985771, z: 0}
+  - {x: 14.8424015, y: -10.134126, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
 --- !u!4 &1760106927
