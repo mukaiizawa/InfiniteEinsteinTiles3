@@ -9,7 +9,7 @@ public class SteamManager : MonoBehaviour
 {
 
     public static SteamManager _instance;
-    public static uint _demoAppId = 4043400;
+    public static uint _demoAppId = 4695390;
     public static uint _productAppId = 4553450;
 
     bool _connected = false;
