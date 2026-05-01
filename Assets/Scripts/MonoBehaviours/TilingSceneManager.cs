@@ -269,11 +269,13 @@ public class TilingSceneManager : MonoBehaviour
 
     bool IsPuzzleSolved()
     {
-        if (PlacedTiles.transform.childCount != _answerBoard.PlacedTileCount()) return false;
-        var placedEdges = _spatialGrid.Values.SelectMany(list => list)
-            .SelectMany(m => m.Edges())
-            .ToList();
-        return _answerOuterEdges.All(outer => placedEdges.Any(e => e.StrictlyEqual(outer)));
+        var placed = _spatialGrid.Values.SelectMany(list => list).ToList();
+        if (placed.Count != _answerBoard.PlacedTileCount()) return false;
+        const float tol = 0.1f;
+        return _answerBoard.PlacedTiles.All(answer =>
+            placed.Any(p =>
+                (p.Position - answer.Position).sqrMagnitude < tol &&
+                p.Rotation == answer.Rotation));
     }
 
     void RemoveTiles(GameObject[] tiles, Record record)
