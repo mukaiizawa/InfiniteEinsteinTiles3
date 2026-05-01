@@ -152,7 +152,7 @@ public class SolutionManager : MonoBehaviour
     void OpenSolution(Solution solution)
     {
         GlobalData.Solution = solution;
-        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Tiling));
+        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Tiling, 1.5f));
     }
 
     /*

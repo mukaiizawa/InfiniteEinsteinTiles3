@@ -556,7 +556,7 @@ public class TilingSceneManager : MonoBehaviour
     void ReloadScene()
     {
         GlobalData.IsRestart = true;
-        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Tiling, 0.5f));
+        StartCoroutine(_loadingManager.LoadAsync(LoadingManager.Scene.Tiling, 1.5f));
     }
 
     Solution UpdatedSolution()

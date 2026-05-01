@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/Assets/Steam/Logo.unity
-    guid: 70307cc207cc11c40be2b6c7c3685da8
   - enabled: 1
     path: Assets/Scenes/Title.unity
     guid: 891efc20176f8a1409f86701b8b276b9
