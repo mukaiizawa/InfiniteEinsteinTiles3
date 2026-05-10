@@ -17,6 +17,7 @@ public class TitleSceneManager : MonoBehaviour
     public GameObject DemoLabel;
 
     public Image ShimmerImage;
+    public Material ShimmerMaterial;
     public float ShimmerDuration = 1.4f;
 
     AudioManager _audioManager;
@@ -33,15 +34,11 @@ public class TitleSceneManager : MonoBehaviour
         _assetManager = this.gameObject.GetComponent<AssetManager>();
         _loadingManager = this.gameObject.GetComponent<LoadingManager>();
         _persistentManager = this.gameObject.GetComponent<PersistentManager>();
-        if (ShimmerImage != null)
+        if (ShimmerImage != null && ShimmerMaterial != null)
         {
             ShimmerImage.gameObject.SetActive(true);
-            var shader = Shader.Find("TitleShimmer");
-            if (shader != null)
-            {
-                _shimmerMaterial = new Material(shader);
-                ShimmerImage.material = _shimmerMaterial;
-            }
+            _shimmerMaterial = new Material(ShimmerMaterial);
+            ShimmerImage.material = _shimmerMaterial;
             ShimmerImage.enabled = false;
         }
     }

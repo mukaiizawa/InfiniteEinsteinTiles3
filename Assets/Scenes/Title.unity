@@ -63016,6 +63016,7 @@ MonoBehaviour:
   VersionText: {fileID: 1904075557}
   DemoLabel: {fileID: 1151687107}
   ShimmerImage: {fileID: 3001000004}
+  ShimmerMaterial: {fileID: 2100000, guid: 361c51014598d3440982366a24050bc7, type: 2}
   ShimmerDuration: 1.4
 --- !u!114 &1511110717
 MonoBehaviour:
