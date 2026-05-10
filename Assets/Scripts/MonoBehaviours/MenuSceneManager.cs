@@ -216,6 +216,7 @@ public class MenuSceneManager : MonoBehaviour
         QuitButton.onClick.AddListener(OnPowerOff);
 #if DEMO
         DemoNoticePanel.SetActive(true);
+        DemoNoticePanel.GetComponentInChildren<Button>().onClick.AddListener(() => DemoNoticePanel.SetActive(false));
 #endif
         ChangeState(State.None);
     }
