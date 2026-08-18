@@ -8,9 +8,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Building
 
-Open the project in Unity 6000.4.6f1. There is no CLI build command — use the Unity Editor. The solution files (`InfiniteEinsteinTiles3.sln`) can be opened in an IDE for code editing.
+Open the project in Unity 6000.4.6f1 for development. The solution files (`InfiniteEinsteinTiles3.sln`) can be opened in an IDE for code editing.
 
-A `DEMO` scripting define symbol exists for demo builds (see `#if DEMO` guards in code).
+Release builds go through the Steam pipeline rather than the Editor UI. Run `/build-upload-iet3` to bump the version, build Windows + macOS in a single batchmode session via `BuildScript`, and upload to Steam. The Editor must be closed while a batchmode build runs.
+
+A `DEMO` scripting define symbol exists for demo builds (see `#if DEMO` guards in code). `BuildScript.BuildAllDemo` adds it for the duration of the build and restores the original defines afterwards.
 
 ## Branching Strategy
 
