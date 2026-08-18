@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Infinite Einstein Tiles3** is a Unity game (version 6000.0.35f1) about placing aperiodic "einstein" monotiles (spectre-shaped 14-sided polygons) on an infinite canvas. It is published on Steam. The game has two modes: Creative (free placement) and Puzzle (complete a target tiling pattern within constraints).
+**Infinite Einstein Tiles3** is a Unity game (version 6000.4.6f1) about placing aperiodic "einstein" monotiles (spectre-shaped 14-sided polygons) on an infinite canvas. It is published on Steam. The game has two modes: Creative (free placement) and Puzzle (complete a target tiling pattern within constraints).
 
 ## Building
 
-Open the project in Unity 6000.0.35f1. There is no CLI build command — use the Unity Editor. The solution files (`InfiniteEinsteinTiles3.sln`) can be opened in an IDE for code editing.
+Open the project in Unity 6000.4.6f1. There is no CLI build command — use the Unity Editor. The solution files (`InfiniteEinsteinTiles3.sln`) can be opened in an IDE for code editing.
 
 A `DEMO` scripting define symbol exists for demo builds (see `#if DEMO` guards in code).
 
